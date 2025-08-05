@@ -19,8 +19,8 @@ class ThaiBulkSmsService
             'timeout'  => 10.0,
         ]);
 
-        $this->apiKey = config('services.thaibulksms.api_key');
-        $this->secret = config('services.thaibulksms.api_secret');
+        $this->apiKey = "CJ0h6lE1xQvFdIAH0fz4L0ZmQ-KmKD";//conig('services.thaibulksms.api_key');
+        $this->secret = "SPlZxYh6-W5pAfDlSa6Kp1GObmOee_"; //config('services.thaibulksms.api_secret');
     }
 
      public function send($phone, $message)
