@@ -15,7 +15,7 @@ class ThaiBulkSmsService
     public function __construct()
     {
        $this->client = new Client([
-            'base_uri' => 'https://api.thaibulksms.com/',
+            'base_uri' => 'https://api-v2.thaibulksms.com/sms',
             'timeout'  => 10.0,
         ]);
 
