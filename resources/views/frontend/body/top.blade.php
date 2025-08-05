@@ -1,0 +1,93 @@
+ @php
+
+    $id = Auth::guard('member')->id();
+    $profileData = App\Models\Member::find($id);
+    $pawnData = App\Models\PawnData::where('member_id', $id)->get();
+@endphp
+<header class="header">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="{{  asset('frontend/assets/img/logo.svg')}}" alt="Wisdom Gold">
+        </a>
+
+        <ul class="nav nav-menu">
+            <li><a href="{{ route('homepage') }}">หน้าหลัก</a></li>
+            <li><a href="{{ route('frontend.promotions') }}">โปรโมชั่น</a></li>
+            <li><a href="/estimate_price/simulator">ประเมินราคา</a></li>
+            {{-- <li><a href="#">ฝากขายทอง</a></li> --}}
+            <li><a href="{{ route('frontend.branch_list') }}">สาขาที่ให้บริการ</a></li>
+            <li><a href="/faqs">คำถามที่พบบ่อย</a></li>
+            <li><a href="/contactus">ติดต่อเรา</a></li>
+        </ul>
+         @if (!Auth::guard('member')->user())
+     <a href="{{ route('member.login') }}"><img src="{{ asset('frontend/assets/img/icons/icon-login.svg') }}"  class="login-icon"  title="ล็อกอิน"></a>
+ @endif
+
+        @if (Auth::guard('member')->user())
+        <div class="user-infos">
+            {{-- <a href="#" class="card-link"></a> --}}
+            <div class="avatar">
+                {{-- <span class="badge"></span> --}}
+                <a href="{{ route('member.member_dashboard') }}">
+                    <img src="{{  asset('frontend/assets/img/thumb/avatar.png')}}" alt="">
+                </a>
+            </div>
+            <div class="info">
+                <h3>ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</h3>
+                {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
+                <p><a href="{{ route('customer.transaction_history') }}">ธุรกรรมของคุณ</a> | <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
+
+            </div>
+        </div>
+         @else
+        <a class="btn login" href="{{ route('member.login') }}">เข้าสู่ระบบ</a>
+        @endif
+    </div>
+</header>
+
+
+
+<button class="btn btn-menu navbar-toggle" type="button">
+    <span class="group">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+</button>
+
+<div class="navbar-slider">
+    <ul class="nav nav-slider">
+        <li><a href="/">หน้าหลัก</a></li>
+        <li><a href="{{ route('frontend.promotions') }}">โปรโมชั่น</a></li>
+        <li><a href="/estimate_price/simulator">ประเมินราคา</a></li>
+        {{-- <li><a href="#">ฝากขายทอง</a></li> --}}
+        <li><a href="{{ route('frontend.branch_list') }}">สาขาที่ให้บริการ</a></li>
+        <li><a href="/faqs">คำถามที่พบบ่อย</a></li>
+        <li><a href="/contactus">ติดต่อเรา</a></li>
+         @if (!Auth::guard('member')->user())
+        <li><a href="{{ route('member.login') }}">เข้าสู่ระบบ</a></li>
+        @endif
+    </ul>
+</div>
+ @if (Auth::guard('member')->user())
+<div class="section section-user-info">
+    <div class="container">
+        <div class="user-infos">
+            {{-- <a href="#" class="card-link"></a> --}}
+            <div class="avatar">
+                {{-- <span class="badge"></span> --}}
+                <a href="{{ route('member.member_dashboard') }}">
+                    <img src="{{  asset('frontend/assets/img/thumb/avatar.png')}}" alt="">
+                </a>
+            </div>
+
+            <div class="info">
+                 <h3>ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</h3>
+                {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
+                 <p><a href="{{ route('customer.transaction_history') }}">ธุรกรรมของคุณ</a> | <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endif

@@ -1,0 +1,129 @@
+@extends('admin.admin_dashboard')
+@section('admin')
+<script src="{{ asset('backend/assets/libs/jquery/jquery.min.js')}}"></script>
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">รายงานรายการขายฝาก</h4>
+
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">ภาพรวม</a></li>
+                            <li class="breadcrumb-item active">รายงานรายการขายฝาก</li>
+                        </ol>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+            <!-- end page title -->
+
+
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">รายการขายฝาก</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="column_chart" data-colors='["#16604A"]' class="apex-charts" dir="ltr"></div>
+                    </div>
+                </div><!--end card-->
+                <script>
+                    /* Pass data to JavaScript to generate bar graph*/
+                   window.appData = @json($data);
+                </script>
+
+            </div>
+        </div>
+
+        <!-- end row -->
+
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">รายการขายฝาก<br>
+                            <p class="card-title-desc">รายการขายฝากถึงวันที่ {{ now()->day }} {{ config('constants.month_th')[now()->month-1] }} {{ now()->year + 543 }} เวลา {{ now()->format('H:i') }}
+                            </p>
+                        </h4>
+
+                        <div class="d-flex align-items-center gap-1 mb-4">
+                            <div class="input-group datepicker-range">
+                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter">
+                                <button class="input-group-text" id="date1" data-toggle><i class="bx bx-calendar-event"></i></button>
+                            </div>
+                            <div class="dropdown">
+                                <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#" id="date_filter_submit">Action</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                      </div>
+
+                    <div class="card-body">
+                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                            <thead>
+                            <tr>
+                                <th>เลขที่สัญญา</th>
+                                <th>รหัสบาร์โค้ด</th>
+                                <th>วันที่ครบกำหนด</th>
+                                <th>วันที่ทำรายการ</th>
+                                <th>สินค้า/น้ำหนัก</th>
+                                <th>ดอกเบี้ยที่ชำระ</th>
+                                <th>ลูกค้า</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+                                @foreach ($pawn_data as $item)
+                                <tr>
+                                    <td>{{ $item->pawn_id }}</td>
+                                        <td>{{ $item->pawn_barcode }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item->pawn_date)->addDays(60)->thaidate('j F Y') }}
+                                        </td>
+                                        <td>{{ $item->remarks }}</td>
+                                        <td>{{ $item->total_weight }}</td>
+                                        <td>{{ $item->total_pawn_amount }}</td>
+                                        <td>{{ $item->customer_name }}</td>
+
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bx bx-dots-horizontal-rounded"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item" href="{{ route('backend.pawn_transaction.contract',$item->id) }}">หนังสือสัญญา</a></li>
+                                                <li><a class="dropdown-item" href="#">พิมพ์</a></li>
+                                                <li><a class="dropdown-item" href="#">ใบเสร็จ</a></li>
+                                                <li><a class="dropdown-item" href="#">แก้ไข</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end cardaa -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <!-- end content -->
+    </div><!-- end container-fluid -->
+</div><!-- end page-content -->
+@endsection
+
