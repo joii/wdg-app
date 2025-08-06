@@ -84,11 +84,16 @@ maximum-scale=1.0, user-scalable=no" />
         function calculate()
         {
             //console.log($('#weight_tot').val());
-            var w = $('#weight_tot').val();
+
+            if($('#weight_tot').val() == null || $('#weight_tot').val() == ''){
+                var w = 1;
+            }else{
+                var w = $('#weight_tot').val();
+            }
             var price = {{ $goldPrices[0]->buy_gold_bar }};
             var percentage = 0.965;
             var cal_percentage = 0.89;
-            var w_txt = $('#weight_tot').val()*4;
+            var w_txt = w*4;
 
            // var total_amount = Number(w * price * percentage * cal_percentage).toFixed(2);
            var number = (w * price * percentage * cal_percentage);
@@ -112,19 +117,23 @@ maximum-scale=1.0, user-scalable=no" />
         //ตั้งค่าน้ำหนักทอง
         function setWeight(weight)
         {
-            $('#weight_tot').val(weight);
+                $('#weight_tot').val(weight);
         }
 
         function calculate()
         {
             //console.log($('#weight_tot').val());
-            var w = $('#weight_tot').val();
+            if($('#weight_tot').val() == null || $('#weight_tot').val() == ''){
+                var w = 1;
+            }else{
+                var w = $('#weight_tot').val();
+            }
             var price = {{ $goldPrices[0]->sell_gold_bar }};
             var percentage = 0.965;
             var cal_percentage = 0.89;
-            var w_txt = w;
-            if(w !=1){
-                var w_txt = $('#weight_tot').val()*4;
+            var w_txt=1;
+            if(w !="1"){
+                var w_txt = w*4;
             }
 
             if(w ==0.125){
@@ -133,11 +142,13 @@ maximum-scale=1.0, user-scalable=no" />
 
 
            // var total_amount = Number(w * price * percentage * cal_percentage).toFixed(2);
-           var number = (w * price * percentage * cal_percentage);
-            var total_amount = number.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-            });
+           var number = Math.ceil(w * price * percentage * cal_percentage);
+            // var total_amount = number.toLocaleString('en-US', {
+            // minimumFractionDigits:  0,
+            // maximumFractionDigits: 0
+            // });
+
+            total_amount = number;
 
             switch (w) {
                 case '1': unit = 'บาท'; break;
@@ -145,7 +156,7 @@ maximum-scale=1.0, user-scalable=no" />
                 case '0.5': unit = 'สลึง'; break;
                 case '0.25': unit = 'สลึง'; break;
                 case '0.125': unit = 'สลึง'; break;
-                default: unit = 'สลึง'; break;
+                default: unit = 'บาท'; break;
             }
             $('#cal_title').html('ราคาประเมิน<br>');
             $('#cal_weight').html('น้ำหนัก<br>'+ w_txt + ' ' +unit +'<br>');

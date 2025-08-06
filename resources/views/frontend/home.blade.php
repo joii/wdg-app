@@ -95,11 +95,11 @@
                             </div>
                             <div class="col-5">
                                 <div class="form-select dropdown">
-                                    <a href="#" class="fs-19" data-bs-toggle="dropdown" data-bs-display="static">
-                                        <span class="text" >ระบุ</span>
+                                    <a href="#" class="fs-19" data-bs-toggle="dropdown" data-bs-display="static" >
+                                        <span class="text">1 บาท</span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li onclick="setWeight(1)">1 บาท</li>
+                                        <li onclick="setWeight(1)" >1 บาท</li>
                                         <li onclick="setWeight(0.75)">3 สลึง</li>
                                         <li onclick="setWeight(0.5)">2 สลึง</li>
                                         <li onclick="setWeight(0.25)">1 สลึง</li>
