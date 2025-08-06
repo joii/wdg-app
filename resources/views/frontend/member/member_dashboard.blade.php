@@ -33,6 +33,7 @@
                                   @endphp
                                 สัญญาเลขที่: {{ (Str::substr($year, 2, 2))  }}{{ $item->pawn_id }}</h3>
                                <h3>เลขที่บาร์โค้ด: {{ $item->pawn_barcode }}</h3>
+                                <h3>เลขที่บัตร: {{ $item->pawn_card_no }}</h3>
                                <p>วันที่ทำสัญญา :  {{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F y') }}</p>
                                 <p>ครบกำหนด :  {{ \Carbon\Carbon::parse($item->expire_date)->thaidate('j F y') }}</p>
 
