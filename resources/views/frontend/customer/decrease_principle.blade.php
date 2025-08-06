@@ -133,7 +133,7 @@
                                     <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
                                     <input type="hidden" name="add_amount" id="add_amount" value="">
                                     <button class="btn btn-red mx-1 w-135" type="submit">
-                                        ยื่นคำขอลดเงินต้น
+                                        ยื่นคำขอ
                                     </button>
                                   </form>
 
