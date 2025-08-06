@@ -26,16 +26,19 @@
         @if (Auth::guard('member')->user())
         <div class="user-infos">
             {{-- <a href="#" class="card-link"></a> --}}
-            <div class="avatar">
-                {{-- <span class="badge"></span> --}}
+            {{-- <div class="avatar">
+                <span class="badge"></span>
                 <a href="{{ route('member.member_dashboard') }}">
                     <img src="{{  asset('frontend/assets/img/thumb/avatar.png')}}" alt="">
                 </a>
-            </div>
+            </div> --}}
             <div class="info">
                 <h3>ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</h3>
                 {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
-                <p><a href="{{ route('customer.transaction_history') }}">ธุรกรรมของคุณ</a> | <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
+                <p>
+                    <a href="{{ route('member.member_dashboard') }}">ธุรกรรมของคุณ</a> |
+                    <a href="{{ route('customer.transaction_history') }}">ทำรายการ</a> |
+                    <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
 
             </div>
         </div>
