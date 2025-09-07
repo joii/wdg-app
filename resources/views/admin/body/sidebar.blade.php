@@ -237,7 +237,7 @@
 
 
                     <div class="mt-4">
-                        <a href="#!" class="btn btn-primary mt-2" style="width:80%">คู่มือการใช้</a>
+                        <a href="https://docs.google.com/document/d/1Huj_c2roLMUY4j31m446CD3HMVvDFxyp_XS8gAyQMMI/edit?usp=sharing" class="btn btn-primary mt-2" style="width:80%" target="_blank">คู่มือการใช้</a>
                     </div>
 
             </div>
