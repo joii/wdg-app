@@ -3,6 +3,9 @@
 namespace App\Services\SMS;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
+use App\Models\SmsConfig;
+
 
 class ThaiBulkSmsService
 {
@@ -19,8 +22,10 @@ class ThaiBulkSmsService
             'timeout'  => 10.0,
         ]);
 
-        $this->apiKey = "Y5gF04QVE4oLV-xnlovSfZnj8g3GxE";//config('services.thaibulksms.api_key');
-        $this->secret = "NI1RR2lnrgdk_r1-957oNKjbAd7NY4";//config('services.thaibulksms.api_secret');
+        $config = SmsConfig::where('service_type','sms')->first();
+
+        $this->apiKey = $config->api_key;//config('services.thaibulksms.api_key');
+        $this->secret = $config->api_secret;//config('services.thaibulksms.api_secret');
 
 
     }

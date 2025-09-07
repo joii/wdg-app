@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
+use App\Models\SmsConfig;
 
 class OtpService
 {
@@ -21,8 +23,10 @@ class OtpService
             'timeout'  => 10.0,
         ]);
 
-        $this->apiKey    = "1839771252963878";//config('services.thaibulkotp.api_key');
-        $this->apiSecret = "3509548d05e4f9ea6561e1e55d2b31e2";//config('services.thaibulkotp.api_secret');
+        $config = SmsConfig::where('service_type','otp')->first();
+
+        $this->apiKey    = $config->api_key;//config('services.thaibulkotp.api_key');
+        $this->apiSecret = $config->api_secret;//config('services.thaibulkotp.api_secret');
     }
 
     /**
