@@ -101,7 +101,7 @@ class PromotionManagementController extends Controller
             $thumbnail = $request->file('thumbnail_path');
             $manager = new ImageManager(new Driver());
             $thumbnail_name_gen = hexdec(uniqid()).'.'.$thumbnail->getClientOriginalExtension();
-            $thumbnail_img = $manager->read($image);
+            $thumbnail_img = $manager->read($thumbnail);
             $thumbnail_img->resize(1000,1000)->save(public_path('uploads/promotions/thumbnail/'.$thumbnail_name_gen));
             $thumbnail_path = 'uploads/promotions/thumbnail/'.$thumbnail_name_gen;
 
