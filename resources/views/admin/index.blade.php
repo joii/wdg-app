@@ -209,7 +209,9 @@
                     <div class="card-body px-0">
                         <div class="px-3" data-simplebar style="max-height: 352px;">
                             <ul class="list-unstyled activity-wid mb-0">
+
                                 @foreach ($overdue as $item )
+
                                 <li class="activity-list activity-border">
                                     <div class="activity-icon avatar-md">
                                         <span class="avatar-title bg-danger-subtle text-danger rounded-circle">
@@ -218,14 +220,15 @@
                                     </div>
                                     <div class="timeline-list-item">
                                         <div class="d-flex">
+
                                             <div class="flex-grow-1 overflow-hidden me-4">
                                                 <h5 class="font-size-14 mb-1">วันครบกำหนดสัญญา :{{ \Carbon\Carbon::parse($item->pawn_expire_date)->thaidate('j F Y') }}</h5>
-                                                <div class="font-size-13">สัญญาเลขที่ :	68{{ $item->pawn_id }}</div>
+                                                {{-- <div class="font-size-13">สัญญาเลขที่ :	68{{ $item->pawn_id }}</div> --}}
                                                 <div class="font-size-13">รหัสบาร์โค้ด : {{ $item->pawn_barcode }}</div>
                                             </div>
-                                            <div class="flex-shrink-2 text-end me-3">
+                                            {{-- <div class="flex-shrink-2 text-end me-3">
                                                 <div class="font-size-13">{{ number_format($item->total_pawn_amount) }}</div>
-                                            </div>
+                                            </div> --}}
                                              <div class="flex-shrink-0 text-end">
                                                 <div class="dropdown">
                                                     <a class="text-muted dropdown-toggle font-size-24" role="button" data-bs-toggle="dropdown" aria-haspopup="true">

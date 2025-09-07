@@ -67,16 +67,26 @@ class AdminController extends Controller
         $import_log = DB::table('import_logs')->orderBy('created_at','desc')->get();
 
         // 5. Overdue Pawns Interests
-        $range = 15;
+        $range = 180;
         $endDate = Carbon::now(); // วันที่ปัจจุบัน
         $startDate = Carbon::now()->subDays($range); // ย้อนหลัง 30 วัน
 
+        // $overdue = DB::table('pawn_interest_data')
+        //     // ->whereYear('pawn_expire_date', 2025)
+        //     ->select('*')
+        //     ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+        //     ->distinct()
+        //     ->get()
+        //     ->groupBy('pawn_expire_date');
+
         $overdue = DB::table('pawn_interest_data')
-            ->whereYear('pawn_expire_date', 2025)
-            ->whereBetween('pawn_expire_date', [$startDate,$endDate])
-            ->select('*')
-            ->distinct()
-            ->get();
+              ->select('pawn_barcode','pawn_expire_date')
+              ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+              ->groupBy('pawn_barcode','pawn_expire_date')
+              ->get();
+
+
+
 
         return view('admin.index', compact('pawn_data','pawn_total_amount','pawn_total_transaction','interest_total_amount','interest_total_transaction','increase_total_amount','increase_total_transaction','decrease_total_amount','decrease_total_transaction','import_log','overdue','keyword','range'));
 
@@ -178,12 +188,18 @@ class AdminController extends Controller
         // 5. Overdue Pawns Interests
         $endDate = Carbon::now(); // วันที่ปัจจุบัน
         $startDate = Carbon::now()->subDays($range); // ย้อนหลัง 30 วัน
-        $overdue = DB::table('pawn_interest_data')
-            ->whereYear('pawn_expire_date', 2025)
-            ->whereBetween('pawn_expire_date', [$startDate,$endDate])
-            ->select('*')
-            ->distinct()
-            ->get();
+        // $overdue = DB::table('pawn_interest_data')
+        //     ->whereYear('pawn_expire_date', 2025)
+        //     ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+        //     ->select('*')
+        //     ->distinct()
+        //     ->get();
+
+         $overdue = DB::table('pawn_interest_data')
+              ->select('pawn_barcode','pawn_expire_date')
+              ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+              ->groupBy('pawn_barcode','pawn_expire_date')
+              ->get();
 
         return view('admin.index', compact('pawn_data','pawn_total_amount','pawn_total_transaction','interest_total_amount','interest_total_transaction','increase_total_amount','increase_total_transaction','decrease_total_amount','decrease_total_transaction','import_log','overdue','keyword','range'));
 
