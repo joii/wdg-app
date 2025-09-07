@@ -92,6 +92,7 @@
                                 </script>
                                 <input type="hidden" name="pawn_id" value="{{ $pawn_data->id }}">
                                 <input type="hidden" name="interest_amount" value="{{ $interest_amount }}">
+                                <input type="hidden" name="number_of_month" value="{{ $number_of_month }}">
                                 <input type="hidden" name="total_pawn_amount" value="0">
                                 <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
                                 <input type="hidden" name="branch_id" value="1">
@@ -102,6 +103,7 @@
                                 <input type="hidden" name="customer_name" value="{{ $pawn_data->customer_name }}">
                                 <input type="hidden" name="customer_address" value="{{ $pawn_data->customer_address }}">
                                 <input type="hidden" name="customer_phone" value="{{ $pawn_data->customer_phone }}">
+                                <input type="hidden" name="id_card" value="{{ $pawn_data->id_card }}">
                                  <div class="buttons interest">
                                     <input type="submit" value="แจ้งชำระเงิน" class="btn  btn-block">
                                 </div>

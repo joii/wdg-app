@@ -10,12 +10,25 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Carbon\Carbon;
+use App\Events\CsvImported;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterImport;
+use Maatwebsite\Excel\Events\ImportFailed;
+use App\Listeners\LogCsvImportFailed;
 
 
 HeadingRowFormatter::default('none');
 
-class PawnInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,WithChunkReading,WithBatchInserts
+class PawnInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,WithChunkReading,WithBatchInserts,WithEvents
 {
+
+    protected $filename;
+
+    // รับชื่อไฟล์เข้ามา
+    public function __construct(string $filename)
+    {
+        $this->filename = $filename;
+    }
     private function parseNumeric($value)
     {
         if ($value === null || $value === '' || strtoupper($value) === 'NULL') {
@@ -48,6 +61,21 @@ class PawnInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,WithC
             'interest_rate' => $this->parseNumeric($row['Percent_Interest']),
         ]);
     }
+
+     public function registerEvents(): array
+    {
+        return [
+            AfterImport::class => function(AfterImport $event) {
+                // Trigger Event หลัง Import เสร็จ  พร้อมชื่อไฟล์ dynamic
+               event(new CsvImported($this->filename)); // Event Generic + Dynamic Parameter
+               //event(new PawnSub100MCsvImported($this->filename));  // use case
+
+            },
+            ImportFailed::class => [LogCsvImportFailed::class, 'handle'],
+
+        ];
+    }
+
 
     public function chunkSize(): int
     {

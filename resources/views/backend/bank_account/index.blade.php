@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">อัตราดอกเบี้ย</h4>
+                    <h4 class="mb-sm-0 font-size-18">บัญชีธนาคาร</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">ภาพรวม</a></li>
-                            <li class="breadcrumb-item active">อัตราดอกเบี้ย</li>
+                            <li class="breadcrumb-item active">บัญชีธนาคาร</li>
                         </ol>
                     </div>
 

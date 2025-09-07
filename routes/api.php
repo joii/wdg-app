@@ -27,19 +27,23 @@ Route::prefix('pawn-data')->group(function () {
 });
 
 Route::prefix('pawn-sub100m-data')->group(function () {
-    Route::post('/import/record', [PawnSub100MDataController::class, 'importRecord']);
+    //Route::post('/import/record', [PawnSub100MDataController::class, 'importRecord']);
+    Route::get('/import/record', [PawnSub100MDataController::class, 'importRecord']);
+    Route::get('/syncPawnData', [PawnSub100MDataController::class, 'syncPawnData']);
     Route::get('/', [PawnSub100MDataController::class, 'getPawnSub100mDataRecords']);
 });
 
 Route::prefix('pawn-sub100nm-data')->group(function () {
     //Route::post('/import/record', [PawnSub100NMDataController::class, 'importRecord']);
     Route::get('/import/record', [PawnSub100NMDataController::class, 'importRecord']);
+    Route::get('/syncPawnData', [PawnSub100NMDataController::class, 'syncPawnData']);
     Route::get('/', [PawnSub100NMDataController::class, 'getPawnSub100nmDataRecords']);
 });
 
 Route::prefix('pawn-subnm-data')->group(function () {
     //Route::post('/import/record', [PawnSubNMDataController::class, 'importRecord']);
     Route::get('/import/record', [PawnSubNMDataController::class, 'importRecord']);
+    Route::get('/syncPawnData', [PawnSubNMDataController::class, 'syncPawnData']);
     Route::get('/', [PawnSubNMDataController::class, 'getPawnSubnmDataRecords']);
 });
 

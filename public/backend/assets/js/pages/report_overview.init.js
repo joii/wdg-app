@@ -16,8 +16,8 @@ var columnColors = getChartColorsArray("#column_chart"),
         dataLabels: { enabled: !1 },
         stroke: { show: !0, width: 2, colors: ["transparent"] },
         series: [
-            { name: "ขายฝาก", data: data[0] },
-            { name: "ต่อดอก", data: data[1] },
+            { name: "ต่อดอก", data: data[0] },
+            { name: "ส่งดอก", data: data[1] },
             {
                 name: "เพิ่มเงินต้น",
                 data: data[2],
@@ -30,26 +30,29 @@ var columnColors = getChartColorsArray("#column_chart"),
         colors: columnColors,
         xaxis: {
             categories: [
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
+                "ม.ค.",
+                "ก.พ.",
+                "มี.ค.",
+                "เม.ย.",
+                "พ.ค.",
+                "มิ.ย.",
+                "ก.ค.",
+                "ส.ค.",
+                "ก.ย.",
+                "ต.ค.",
+                "พ.ย.",
+                "ธ.ค.",
             ],
         },
         yaxis: {
-            title: { text: "$ (thousands)", style: { fontWeight: "500" } },
+            title: { text: "(บาท)", style: { fontWeight: "500" } },
         },
         grid: { borderColor: "#f1f1f1" },
         fill: { opacity: 1 },
         tooltip: {
             y: {
                 formatter: function (e) {
-                    return "$ " + e + " thousands";
+                    return + e + " บาท";
                 },
             },
         },

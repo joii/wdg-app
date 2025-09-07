@@ -36,9 +36,15 @@ return [
     ],
 
     'thaibulksms' => [
-    'api_key' => env('THAIBULKSMS_API_KEY'),
-    'api_secret' => env('THAIBULKSMS_API_SECRET'),
+        'api_key' => env('THAIBULKSMS_API_KEY'),
+        'api_secret' => env('THAIBULKSMS_API_SECRET'),
     ],
+
+    'thaibulkotp' => [
+    'api_key'    => env('THAIBULKOTP_API_KEY'),
+    'api_secret' => env('THAIBULKOTP_API_SECRET'),
+],
+
 
 
 ];

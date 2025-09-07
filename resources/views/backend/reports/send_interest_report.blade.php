@@ -32,8 +32,8 @@
                     <div class="card-header">
                         <h4 class="card-title mb-0">สรุปภาพรวมรายการต่อดอกปี {{ now()->year+543 }}</h4>
                     </div>
-                    <div class="card-body">
-                        <div id="column_chart" data-colors='["#A81818"]' class="apex-charts" dir="ltr"></div>
+                    <div class="card-body" style="color:#e19e0f">
+                        <div id="column_chart" data-colors='["#e19e0f"]' class="apex-charts" dir="ltr"></div>
                     </div>
                 </div><!--end card-->
                 <script>
@@ -50,22 +50,25 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">รายการต่อดอก<br>
-                            <p class="card-title-desc">รายการต่อดอกถึงวันที่ {{ now()->day }} {{ config('constants.month_th')[now()->month-1] }} {{ now()->year + 543 }} เวลา {{ now()->format('H:i') }}
+                             <p class="card-title-desc">รายการต่อดอก {{ \Carbon\Carbon::parse($startOfLastWeek)->thaidate('j F Y') }} ถึงวันที่ {{ \Carbon\Carbon::parse($endOfLastWeek)->thaidate('j F Y') }}
                             </p>
                         </h4>
 
                         <div class="d-flex align-items-center gap-1 mb-4">
+                             <form action="{{ route('backend.reports.interest_custom_report') }}" method="POST" id="custom_report">
+                                @csrf
                             <div class="input-group datepicker-range">
-                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter">
-                                <button class="input-group-text" id="date1" data-toggle><i class="bx bx-calendar-event"></i></button>
+                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
+                                <button class="input-group-text" id="date1" data-toggle type="button"><i class="bx bx-calendar-event"></i></button>
                             </div>
+                            </form>
                             <div class="dropdown">
                                 <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bx bx-dots-horizontal-rounded"></i>
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" id="date_filter_submit">Action</a></li>
+                                    <li><a class="dropdown-item" href="#" id="date_filter_submit" onclick="$('#custom_report').submit()">Action</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -77,35 +80,40 @@
                             <tr>
                                 <th>เลขที่สัญญา</th>
                                 <th>รหัสบาร์โค้ด</th>
-                                <th>วันที่ครบกำหนด</th>
                                 <th>วันที่ทำรายการ</th>
-                                <th>สินค้า/น้ำหนัก</th>
                                 <th>ดอกเบี้ยที่ชำระ</th>
                                 <th>ลูกค้า</th>
+                                <th>เบอร์ติดต่อ</th>
+                                <th style="width: 90px;"></th>
                             </tr>
                             </thead>
 
 
                             <tbody>
-                            <tr>
-                                <td>68300870</td>
-                                <td>AHEWGJ971</td>
-                                <td>1 พ.ค. 2568</td>
-                                <td>1 พ.ค. 2568</td>
-                                <td>แหวนบริษัท B หนัก 7.5</td>
-                                <td>150</td>
-                                <td>น.ส. อนุสรา  ภูชื่นแสง</td>
+                            @foreach ($transactions as $item)
+                              <tr>
+                                <td>{{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('y') }}{{sprintf('%05d', $item->id) }}</td>
+                                <td> {{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('j F Y') }}</td>
+                                <td>{{ $item->transaction_date }}</td>
+                                <td>{{ $item->interest }}</td>
+                                <td>{{ $item->customer_name }}</td>
+                                <td>{{ $item->customer_phone }}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bx bx-dots-horizontal-rounded"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
 
-                            <tr>
-                                <td>68300871</td>
-                                <td>AHEWGJ972</td>
-                                <td>12 พ.ค. 2568</td>
-                                <td>10 พ.ค. 2568</td>
-                                <td>คาร์เทียร์ หนัก 15.17</td>
-                                <td>500</td>
-                                <td>นาย เมธา โภควรรณวิทย์</td>
-                            </tr>
+
+                            @endforeach
+
+
                             </tbody>
                         </table>
                     </div>
@@ -118,12 +126,6 @@
     </div><!-- end container-fluid -->
 </div><!-- end page-content -->
 <script>
-    $('#date_filter_submit').click(function() {
-  var inputValue = $('input[name="date_filter"]').val();
-  // Do something with inputValue, like logging it to the console
-  alert(inputValue);
-});
-
 $('#datatable-buttons_filter').label('ค้นหา:');
 </script>
 @endsection

@@ -30,6 +30,7 @@ use App\Http\Controllers\Frontend\PawnOnlineController;
 use App\Http\Controllers\Frontend\PromotionsController;
 use App\Http\Controllers\Frontend\SimulatorController;
 use App\Http\Controllers\Frontend\FAQController;
+use App\Http\Controllers\Frontend\OtpController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\WebAPI\PawnInterestController;
 use App\Http\Controllers\WebAPI\GoldPriceAPIController;
@@ -100,9 +101,18 @@ Route::middleware('member')->group(function () {
 // Frontend : Auth Route
 Route::get('/member/login', [AuthController::class, 'showLoginForm'])->name('member.login');
 Route::post('/member/login', [AuthController::class, 'Login'])->name('member.login.attempt');
+Route::post('/otp/request', [AuthController::class, 'requestOtp2'])->name('otp.request')->middleware('throttle:5,1');
 Route::get('/member/logout', [AuthController::class, 'Logout'])->name('member.logout');
 Route::get('/member/register', [AuthController::class, 'showRegisterForm'])->name('member.register');
 Route::post('/member/register-submit', [AuthController::class, 'Register'])->name('member.register.submit');
+
+// OTP & SMS Service
+//Route::post('/otp/request', [OtpController::class, 'requestOtp']);
+//Route::post('/otp/request', [AuthController::class, 'requestOtp'])->middleware('throttle:5,1');
+//Route::post('/otp/verify', [AuthController::class, 'verifyOtp']);
+
+Route::get('/otp/verify', [AuthController::class, 'showVerifyForm'])->name('otp.verify.form');
+Route::post('/otp/verify', [AuthController::class, 'verifyOtp2'])->name('otp.verify');
 
 // All Frontend Route
 //Route::get('/estimate_price/simulator', [AuthController::class, 'showLoginForm'])->name('member.login');
@@ -163,6 +173,7 @@ Route::middleware('admin')->group(function () {
 
     // Admin Dashboard Route
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
+    Route::post('/admin/dashboard/latest', [AdminController::class, 'AdminLatestDashboard'])->name('admin.dashboard.latest');
     Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.profile');
     Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])->name('admin.profile.store');
     Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
@@ -266,12 +277,13 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/pawn_transaction',[PawnTransactionController::class,'Index'])->name('backend.pawn_transaction.index');
     Route::get('/backend/pawn_transaction/latest',[PawnTransactionController::class,'Latest'])->name('backend.pawn_transaction.latest');
     Route::get('/backend/pawn_transaction/contract/{id}',[PawnTransactionController::class,'Contract'])->name('backend.pawn_transaction.contract');
+    Route::get('/backend/pawn_transaction/contract_overdue/{pawn_barcode}',[PawnTransactionController::class,'ContractOverdue'])->name('backend.pawn_transaction.contract_overdue');
     Route::get('/backend/pawn_transaction/print/{id}',[PawnTransactionController::class,'Print'])->name('backend.pawn_transaction.print');
     Route::get('/backend/pawn_transaction/detail/{id}',[PawnTransactionController::class,'Detail'])->name('backend.pawn_transaction.detail');
     Route::get('/backend/pawn_transaction/edit/{id}',[PawnTransactionController::class,'Edit'])->name('backend.pawn_transaction.edit');
     Route::post('/backend/pawn_transaction/update', [PawnTransactionController::class, 'Update'])->name('backend.pawn_transaction.update');
     Route::get('/backend/pawn_transaction/interest/{id}',[PawnTransactionController::class,'Interest'])->name('backend.pawn_transaction.pawn_interest');
-
+    Route::post('/backend/pawn_transaction/pawn_custom_transaction', [PawnTransactionController::class, 'CustomPawnTransaction'])->name('backend.pawn_transaction.pawn_custom_transaction');
 
     // Backend : Pawn Add Data Route
     Route::get('/backend/pawn_add',[PawnAddController::class,'Index'])->name('backend.pawn_add.index');
@@ -281,15 +293,22 @@ Route::middleware('admin')->group(function () {
     // Backend : Report Route
     Route::get('/report/overview',[ReportsController::class,'OverviewReport'])->name('backend.reports.overview_report');
     Route::get('/report/pawn',[ReportsController::class,'PawnReport'])->name('backend.reports.pawn_report');
+    Route::post('/report/pawn/data',[ReportsController::class,'PawnCustomReport'])->name('backend.reports.pawn_custom_report');
     Route::get('/report/send_interest',[ReportsController::class,'SendInterestReport'])->name('backend.reports.interest_report');
+    Route::post('/report/send_interest/data',[ReportsController::class,'SendInterestCustomReport'])->name('backend.reports.interest_custom_report');
     Route::get('/report/outstanding_interest',[ReportsController::class,'OutstandingInterestReport'])->name('backend.reports.outstanding_interest_report');
+    Route::post('/report/outstanding_interest/data',[ReportsController::class,'OutstandingInterestCustomReport'])->name('backend.reports.outstanding_interest_custom_report');
     Route::get('/report/increase_principle',[ReportsController::class,'IncreasePrincipleReport'])->name('backend.reports.increase_principle_report');
+    Route::post('/report/increase/data',[ReportsController::class,'IncreaseCustomReport'])->name('backend.reports.increase_custom_report');
     Route::get('/report/decrease_principle',[ReportsController::class,'DecreasePrincipleReport'])->name('backend.reports.decrease_principle_report');
+    Route::post('/report/decrease/data',[ReportsController::class,'DecreaseCustomReport'])->name('backend.reports.decrease_custom_report');
+
 
     // Backend : Customers Route
     Route::get('/backend/customer',[CustomerController::class,'Index'])->name('backend.customer.index');
     Route::get('/backend/customer/latest',[CustomerController::class,'Latest'])->name('backend.customer.latest');
     Route::get('/backend/customer/detail/{id}',[CustomerController::class,'Detail'])->name('backend.customer.detail');
+    Route::get('/backend/customer/cudtomer_info/{customer_name}/{customer_phone}',[CustomerController::class,'CustomerInformation'])->name('backend.customer.cudtomer_info');
 
 
     // Backend : Interest Transaction Route
@@ -299,6 +318,8 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/online_transaction/interest_detail/{token_id}',[PawnOnlineTransactionController::class,'InterestTransactionDetail'])->name('backend.online_transaction.interest.detail');
     Route::get('/backend/online_transaction/interest_edit/{token_id}',[PawnOnlineTransactionController::class,'InterestTransactionEdit'])->name('backend.online_transaction.interest.edit');
     Route::post('/backend/online_transaction/interest_update', [PawnOnlineTransactionController::class, 'InterestTransactionUpdate'])->name('backend.online_transaction.interest.update');
+    Route::get('/backend/online_transaction/interest_by_customer/{id_card}/{phone_no}',[PawnOnlineTransactionController::class,'InterestCustomerTransactionList'])->name('backend.online_transaction.interest_by_customer');
+    Route::post('/backend/online_transaction/interest_custom', [PawnOnlineTransactionController::class, 'CustomInterestTransaction'])->name('backend.online_transaction.interest_custom');
 
 
     // Backend :  Redemption / Accrued Interest Transaction Route
@@ -308,6 +329,8 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/online_transaction/accrued_detail/{token_id}',[PawnOnlineTransactionController::class,'AccruedInterestTransactionDetail'])->name('backend.online_transaction.accrued_interest.detail');
     Route::get('/backend/online_transaction/accrued_edit/{token_id}',[PawnOnlineTransactionController::class,'AccruedInterestTransactionEdit'])->name('backend.online_transaction.accrued_interest.edit');
     Route::post('/backend/online_transaction/accrued_update', [PawnOnlineTransactionController::class, 'AccruedInterestTransactionUpdate'])->name('backend.online_transaction.accrued_interest.update');
+    Route::get('/backend/online_transaction/accrued_by_customer/{id_card}/{phone_no}',[PawnOnlineTransactionController::class,'AccruedInterestCustomerTransactionList'])->name('backend.online_transaction.accrued_by_customer');
+   Route::post('/backend/online_transaction/accrued_custom', [PawnOnlineTransactionController::class, 'CustomAccruedInterestTransaction'])->name('backend.online_transaction.accrued_interest_custom');
 
 
     // Backend :  Increase Principle Transaction Route
@@ -317,6 +340,9 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/online_transaction/increase_detail/{token_id}',[PawnOnlineTransactionController::class,'IncreasePrincipleTransactionDetail'])->name('backend.online_transaction.increase_principle.detail');
     Route::get('/backend/online_transaction/increase_edit/{token_id}',[PawnOnlineTransactionController::class,'IncreasePrincipleTransactionEdit'])->name('backend.online_transaction.increase_principle.edit');
     Route::post('/backend/online_transaction/increase_update', [PawnOnlineTransactionController::class, 'IncreasePrincipleTransactionUpdate'])->name('backend.online_transaction.increase_principle.update');
+    Route::get('/backend/online_transaction/increase_by_customer/{id_card}/{phone_no}',[PawnOnlineTransactionController::class,'IncreaseCustomerTransactionList'])->name('backend.online_transaction.increase_by_customer');
+    Route::post('/backend/online_transaction/increase_custom', [PawnOnlineTransactionController::class, 'CustomIncreaseTransaction'])->name('backend.online_transaction.increase_custom');
+
 
     // Backend :  Decrease Principle Transaction Route
     Route::get('/backend/online_transaction/decrease_list',[PawnOnlineTransactionController::class,'DecreasePrincipleTransactionList'])->name('backend.online_transaction.decrease_principle_list');
@@ -325,6 +351,12 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/online_transaction/decrease_detail/{token_id}',[PawnOnlineTransactionController::class,'DecreasePrincipleTransactionDetail'])->name('backend.online_transaction.decrease_principle.detail');
     Route::get('/backend/online_transaction/decrease_edit/{token_id}',[PawnOnlineTransactionController::class,'DecreasePrincipleTransactionEdit'])->name('backend.online_transaction.decrease_principle.edit');
     Route::post('/backend/online_transaction/decrease_update', [PawnOnlineTransactionController::class, 'DecreasePrincipleTransactionUpdate'])->name('backend.online_transaction.decrease_principle.update');
+    Route::get('/backend/online_transaction/decrease_by_customer/{id_card}/{phone_no}',[PawnOnlineTransactionController::class,'DecreaseCustomerTransactionList'])->name('backend.online_transaction.decrease_by_customer');
+    Route::post('/backend/online_transaction/decrease_custom', [PawnOnlineTransactionController::class, 'CustomDecreaseTransaction'])->name('backend.online_transaction.decrease_custom');
+
+
+    // Cancel Online Transaction
+    Route::post('/backend/online_transaction/cancel',[PawnOnlineTransactionController::class,'CancelTransaction'])->name('backend.online_transaction.cancel');
 
     // Backend :  Redemption Transaction Route
     Route::get('/backend/online_transaction/redemption_list',[PawnOnlineTransactionController::class,'RedemptionTransactionList'])->name('backend.online_transaction.redemption_list');
@@ -379,6 +411,8 @@ Route::middleware('admin')->group(function () {
     Route::get('/backend/authen/admin/delete/{id}',[RoleController::class,'DestroyAdmin'])->name('backend.authen.admin.destroy');
 
 }); // End Admin Middleware
+
+
 
 
 

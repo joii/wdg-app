@@ -52,7 +52,7 @@
                             </div>
                             <hr class="my-4">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <label for="pawn_barcode" class="form-label form-edit">เลขที่บาร์โค้ด:</label>
                                         <input class="form-control" type="text" name="pawn_barcode"  id="pawn_barcode" value="{{ $data->pawn_barcode }}" disabled>
@@ -63,15 +63,29 @@
 
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <label for="pawn_date" class="form-label form-edit">วันที่ทำสัญญา:</label>
                                         <input class="form-control" type="text" name="pawn_date"  id="pawn_date" value="{{ \Carbon\Carbon::parse($data->pawn_date)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
                                     </div>
 
                                     <div >
+                                        <label for="pawn_date_cal_interest" class="form-label form-edit">วันที่ต่อสัญญา:</label>
+                                        <input class="form-control" type="text" name="pawn_date_cal_interest"  id="pawn_date_cal_interest" value="{{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+
+
+                                    <div >
                                         <label for="branch_id" class="form-label form-edit">สาขาที่ทำสัญญา:</label>
                                         <input class="form-control" type="text" name="branch_id"  id="branch_id" value="1" disabled>
+                                    </div>
+                                    <div class="pt-4">
+                                       @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)
+                                           <h2 class="text-danger">ยกเลิกสัญญาแล้ว</h2>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -156,10 +170,19 @@
                                 <input type="hidden" name="id" value="{{ $transaction_data->id}}" />
                                 <input type="hidden" name="token_id" value="{{ $transaction_data->token_id}}" />
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">บันทึกข้อมูล</button>
+                                <button type="button" class="btn btn-danger waves-effect waves-light" onclick="if(confirm('ยืนยันการลบ?')) {  document.getElementById('form_cancel').submit(); }">ยกเลิกสัญญา</button>
 
                               </div>
 
                             </form>
+                            <div>
+                             <form action="{{ route('backend.online_transaction.cancel') }}" method="POST" id="form_cancel">
+                                @csrf
+                                 <input type="hidden" name="id" value="{{ $transaction_data->id}}" />
+                                <input type="hidden" name="token_id" value="{{ $transaction_data->token_id}}" />
+
+                            </form>
+                            </div>
                         </div>
                         <!-- end card body -->
                     </div>

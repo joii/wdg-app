@@ -27,7 +27,7 @@
                     <div class="card-header">
                         <h4 class="card-title mb-0">รายการขายฝาก</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" >
                         <div id="column_chart" data-colors='["#16604A"]' class="apex-charts" dir="ltr"></div>
                     </div>
                 </div><!--end card-->
@@ -47,22 +47,25 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">รายการขายฝาก<br>
-                            <p class="card-title-desc">รายการขายฝากถึงวันที่ {{ now()->day }} {{ config('constants.month_th')[now()->month-1] }} {{ now()->year + 543 }} เวลา {{ now()->format('H:i') }}
+                           <p class="card-title-desc">รายการต่อดอก {{ \Carbon\Carbon::parse($startOfLastWeek)->thaidate('j F Y') }} ถึงวันที่ {{ \Carbon\Carbon::parse($endOfLastWeek)->thaidate('j F Y') }}
                             </p>
                         </h4>
 
                         <div class="d-flex align-items-center gap-1 mb-4">
+                            <form action="{{ route('backend.reports.pawn_custom_report') }}" method="POST" id="custom_report">
+                                @csrf
                             <div class="input-group datepicker-range">
-                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter">
-                                <button class="input-group-text" id="date1" data-toggle><i class="bx bx-calendar-event"></i></button>
+                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
+                                <button class="input-group-text" id="date1" data-toggle type="button"><i class="bx bx-calendar-event"></i></button>
                             </div>
+                            </form>
                             <div class="dropdown">
                                 <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bx bx-dots-horizontal-rounded"></i>
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#" id="date_filter_submit">Action</a></li>
+                                    <li><a class="dropdown-item" href="#" id="date_filter_submit" onclick="$('#custom_report').submit()">Action</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -104,9 +107,9 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li><a class="dropdown-item" href="{{ route('backend.pawn_transaction.contract',$item->id) }}">หนังสือสัญญา</a></li>
-                                                <li><a class="dropdown-item" href="#">พิมพ์</a></li>
+                                                {{-- <li><a class="dropdown-item" href="#">พิมพ์</a></li>
                                                 <li><a class="dropdown-item" href="#">ใบเสร็จ</a></li>
-                                                <li><a class="dropdown-item" href="#">แก้ไข</a></li>
+                                                <li><a class="dropdown-item" href="#">แก้ไข</a></li> --}}
                                             </ul>
                                         </div>
                                     </td>

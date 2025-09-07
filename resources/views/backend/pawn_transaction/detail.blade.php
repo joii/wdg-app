@@ -64,9 +64,9 @@
                                 <div class="col-sm-6">
                                     <div>
                                         <div>
-                                            <h5 class="font-size-15">วันที่ทำสัญญา:</h5>
+                                            <h5 class="font-size-15">วันที่ทำสัญญาขายฝาก/วันที่ต่อสัญญา:</h5>
                                             <p>
-                                                {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('l j F Y') }}
+                                                {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('l j F Y') }}/{{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->thaidate('j F Y') }}
                                             </p>
                                         </div>
 
@@ -118,7 +118,7 @@
                                     <table class="table table-nowrap align-middle mb-0">
                                         <thead>
                                             <tr>
-                                                <th style="width: 70px;">ครั้งที่</th>
+                                                <th style="width: 70px;">จำนวนเดือน</th>
                                                 <th>วันที่ครบกำหนดชำระ</th>
                                                 <th>ยอดชำระ(บาท)</th>
                                                 <th class="text-end" style="width: 120px;">สถานะ</th>
@@ -131,7 +131,7 @@
                                             <tr>
                                                 <th scope="row">{{ $key+1 }}</th>
                                                 <td>  {{-- {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('j F Y') }} --}}
-                                                    {{ \Carbon\Carbon::parse($data->pawn_date)->addDays(30*($key+1))->thaidate('j F Y') }}
+                                                     {{ \Carbon\Carbon::parse($item->pawn_expire_date)->thaidate('j F Y') }}
                                                 </td>
                                                 <td>{{ $item->interest }}</td>
                                                 <td class="text-end"><a class="btn btn-danger btn-rounded waves-effect waves-light">รอการชำระ</a></td>
@@ -147,10 +147,10 @@
                             <div class="d-print-none mt-3">
                                 <div class="float-end">
                                     <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></a>
-                                    <a href="{{ route('backend.online_transaction.interest.contract',$item->pawn_barcode) }}" target="_blank" class="btn btn-success waves-effect waves-light">ต่อดอก</a>
-                                    <a href="{{ route('backend.online_transaction.accrued_interest.contract',$item->pawn_barcode) }}" target="_blank" class="btn btn-success waves-effect waves-light">ส่งดอก</a>
-                                    <a href="{{ route('backend.online_transaction.decrease_principle.contract',$item->pawn_barcode) }}" target="_blank" class="btn btn-primary waves-effect waves-light">ลดเงินต้น</a>
-                                    <a href="{{ route('backend.online_transaction.increase_principle.contract',$item->pawn_barcode) }}" target="_blank" class="btn btn-warning waves-effect waves-light">เพิ่มเงินต้น</a>
+                                    <a href="{{ route('backend.online_transaction.interest_by_customer',[$data->id_card ==NULL?'-':$data->id_card,$data->customer_phone]) }}" class="btn btn-success waves-effect waves-light" target="_blank">ต่อดอก</a>
+                                    <a href="{{ route('backend.online_transaction.accrued_by_customer',[$data->id_card ==NULL?'-':$data->id_card,$data->customer_phone]) }}" class="btn btn-danger waves-effect waves-light" target="_blank">ส่งดอก</a>
+                                    <a href="{{ route('backend.online_transaction.decrease_by_customer',[$data->id_card ==NULL?'-':$data->id_card,$data->customer_phone]) }}" class="btn btn-primary waves-effect waves-light" target="_blank">ลดเงินต้น</a>
+                                    <a href="{{ route('backend.online_transaction.increase_by_customer',[$data->id_card ==NULL?'-':$data->id_card,$data->customer_phone]) }}" class="btn btn-warning waves-effect waves-light" target="_blank">เพิ่มเงินต้น</a>
                                 </div>
                             </div>
                         </div>

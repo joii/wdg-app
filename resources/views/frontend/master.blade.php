@@ -10,7 +10,10 @@ maximum-scale=1.0, user-scalable=no" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
 
-<title>Index | Wisdom Gold</title>
+ <!-- ========== Meta Tags Area Start ========== -->
+@include('frontend.body.meta')
+<!-- Meta Tags Area End -->
+
 
 <link href="{{ asset('frontend/assets/css/bootstrap/bootstrap.min.css')}}" rel="stylesheet">
 <link href="{{ asset('frontend/assets/css/aos.css" rel="stylesheet')}}">
@@ -18,8 +21,10 @@ maximum-scale=1.0, user-scalable=no" />
 <link href="{{ asset('frontend/assets/css/swiper.css')}}" rel="stylesheet">
 <link href="{{ asset('frontend/assets/css/global.css')}}" rel="stylesheet">
 
+
 </head>
 <body>
+    @include('frontend.body.meta_in_body')
     <div class="page">
         <div class="preload">
             <span class="loader"></span>
@@ -48,6 +53,7 @@ maximum-scale=1.0, user-scalable=no" />
     <script src="{{ asset('frontend/assets/js/jquery.validate.js')}}"></script>
     <script src="{{ asset('frontend/assets/js/custom.js')}}"></script>
 
+
     @if (request()->routeIs('member.register'))
     <script src="{{ asset('frontend/assets/js/pages/register.js')}}"></script>
     @endif
@@ -68,8 +74,9 @@ maximum-scale=1.0, user-scalable=no" />
    @if (request()->routeIs('customer.pawn_interest'))
     <script>
     function RollupInterest(val){
-        $('#rollup_interest').html(val);
-        $('#total_interest').html(val);
+        var amount = val.split(",");
+        $('#rollup_interest').html(amount[0]);
+        $('#total_interest').html(amount[0]);
     }
     </script>
     @endif

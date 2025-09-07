@@ -143,6 +143,12 @@
 
                 </div>
                 <!-- end col -->
+                 <div class="d-print-none mt-3 mb-3">
+                    <div class="float-end">
+                        <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></a>
+
+                    </div>
+                 </div>
             </div>
             <!-- end row -->
 

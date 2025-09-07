@@ -146,7 +146,7 @@
                                             <select class="form-select selected valid" name="interest_amount" aria-invalid="false" style="width:90px;" onchange="RollupInterest(this.value)">
                                                 <option value="-">ระบุ</option>
                                                 @foreach ($interest_data as $item)
-                                                     <option value="{{ $item->interest }}">{{ $item->number_of_month }} เดือน</option>
+                                                     <option value="{{ $item->interest }},{{ $item->number_of_month }}">{{ $item->number_of_month }} เดือน</option>
                                                 @endforeach
 
 

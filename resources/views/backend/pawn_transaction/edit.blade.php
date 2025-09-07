@@ -52,7 +52,7 @@
                             </div>
                             <hr class="my-4">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <label for="pawn_barcode" class="form-label form-edit">เลขที่บาร์โค้ด:</label>
                                         <input class="form-control" type="text" name="pawn_barcode"  id="pawn_barcode" value="{{ $data->pawn_barcode }}" disabled>
@@ -63,15 +63,24 @@
 
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <label for="pawn_date" class="form-label form-edit">วันที่ทำสัญญา:</label>
                                         <input class="form-control" type="text" name="pawn_date"  id="pawn_date" value="{{ \Carbon\Carbon::parse($data->pawn_date)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
                                     </div>
 
-                                    <div >
+                                    <div>
+                                        <label for="pawn_cal_date_interest" class="form-label form-edit">วันที่ต่อสัญญา:</label>
+                                        <input class="form-control" type="text" name="pawn_cal_date_interest"  id="pawn_cal_date_interest" value="{{ \Carbon\Carbon::parse($data->pawn_cal_date_interest)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4">
+
+
+                                    <div>
                                         <label for="branch_id" class="form-label form-edit">สาขาที่ทำสัญญา:</label>
-                                        <input class="form-control" type="text" name="branch_id"  id="branch_id" value="1" disabled>
+                                        <input class="form-control" type="text" name="branch_id"  id="branch_id" value="{{ $data->branch_id }}" disabled>
                                     </div>
                                 </div>
                             </div>

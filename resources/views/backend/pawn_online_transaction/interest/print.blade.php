@@ -37,7 +37,7 @@
                         <p class="mb-1 text-print">64/6-7 ม.4 ต.ดอนหัวฬ่อ อ.เมืองชลบุรี จ.ชลบุรี 20000</p>
                         <p>092 979 7777</p>
                         <div>
-                            <strong>เลขที่บัตร:</strong> {{ $data->pawn_card_no }}</br>
+                            <strong>เลขที่บัตร:</strong> {{ $data->pawn_card_no}}</br>
                             <strong>เลขที่บาร์โค้ด:</strong>{{ $data->pawn_barcode }}</br>
                             <strong>วันที่ฝากดอก:</strong> {{ \Carbon\Carbon::parse($interest_data->pawn_cal_interest_date)->addDays(60)->thaidate('j F Y') }}<br/>
                             <strong>จำนวนเงินเพิ่มต้น:</strong>{{ number_format($transaction_data->payment_amount) }} บาท<br/>

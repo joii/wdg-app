@@ -15,14 +15,23 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Services\SMS\ThaiBulkSmsService;
 
 
 class PawnOnlineController extends Controller
 {
+
+   protected $ThaiBulkSmsService;
+
+    public function __construct(ThaiBulkSmsService $ThaiBulkSmsService)
+    {
+        $this->ThaiBulkSmsService = $ThaiBulkSmsService;
+    }
     public function Index(){
 
     }
 
+    // ต่อดอก
     public function PawnInterest($pawn_barcode){
        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
        $interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->get();
@@ -30,20 +39,25 @@ class PawnOnlineController extends Controller
 
     }
 
+    // ชำระดอก (ต่อดอก)
     public function PayInterest(Request $request){
         $pawn_barcode = $request->pawn_barcode;
-        $interest_amount = $request->interest_amount;
+        $interest_amount_data = explode(',',$request->interest_amount);
+        $interest_amount = $interest_amount_data[0];
+        $number_of_month = $interest_amount_data[1];
 
         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
 
-          return view('frontend.customer.pay_interest', compact('pawn_data','interest_amount'));
+          return view('frontend.customer.pay_interest', compact('pawn_data','interest_amount','number_of_month'));
     }
 
+    // ยืนยันการชำระดอก
     public function StorePayInterest(Request $request){
 
          $pawn_id = $request->pawn_id;
          $pawn_barcode = $request->pawn_barcode;
          $transaction_type = $request->transaction_type;
+         $interest_amount = $request->interest_amount;
 
           // จำนวนเงินที่โอน
          $payment_amount = $request->interest_amount;
@@ -72,8 +86,9 @@ class PawnOnlineController extends Controller
                 'branch_id' => $request->branch_id,
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => NULL,
-                'interest' => 0,
+                'interest' => $payment_amount,
                 'amount' => 0,
+                'number_of_month' => $request->number_of_month,
                 'payment_amount' => $payment_amount,
                 'payment_method' => $request->payment_method,
                 'payment_date' => $request->payment_date,
@@ -82,6 +97,7 @@ class PawnOnlineController extends Controller
                 'customer_name' => $request->customer_name,
                 'customer_address' => $request->customer_address,
                 'customer_phone' => $request->customer_phone,
+                'id_card' => $request->id_card,
                 'status' => 'pending',
                 'created_at' => Carbon::now(),
             ]);
@@ -107,7 +123,11 @@ class PawnOnlineController extends Controller
             ]);
 
 
-       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        // Send SMS to customer/Admin
+        //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
+        $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
+
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
 
         $member_id = Auth::guard('member')->id();
 
@@ -115,8 +135,13 @@ class PawnOnlineController extends Controller
         return view('frontend.customer.transaction_history', compact('transactions'));
     }
 
+     /**
+      *
+      * Increase Principle
+      */
 
 
+    // เพิ่มเงินต้น
     public function PawnAdd($pawn_barcode){
        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
        $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
@@ -132,6 +157,7 @@ class PawnOnlineController extends Controller
 
     }
 
+    // ส่งดอกก่อนทำการเพิ่มต้น
     public function PawnAddCheckOutstandingInterest(Request $request){
          $pawn_barcode = $request->barcode;
 
@@ -149,6 +175,7 @@ class PawnOnlineController extends Controller
 
     }
 
+    // ชำระดอกก่อนทำการเพิ่มต้น
     public function PayOutstandingInterest(Request $request){
         $pawn_barcode = $request->barcode;
         $customer_id = $request->customer_id;
@@ -167,6 +194,7 @@ class PawnOnlineController extends Controller
 
     }
 
+    // ยืนยันการชำระดอกก่อนทำการเพิ่มต้น
     public function ConfirmPayOutstandingInterest(Request $request){
         $pawn_barcode = $request->pawn_barcode;
         $customer_id = $request->customer_id;
@@ -184,6 +212,7 @@ class PawnOnlineController extends Controller
           return view('frontend.customer.confirm_payment', compact('pawn_data','pawn_send_data','count_send_data','customer_id','add_amount'));
     }
 
+     // บันทึกการชำระดอกก่อนทำการเพิ่มต้น
      public function StorePayOutstandingInterest(Request $request){
 
          $pawn_id = $request->pawn_id;
@@ -212,7 +241,7 @@ class PawnOnlineController extends Controller
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
-                'amount' => $request->total_pawn_amount,
+                'amount' => 0,//$request->total_pawn_amount,
                 'payment_amount' => $request->interest,
                 'payment_method' => $request->payment_method,
                 'payment_date' => $request->payment_date,
@@ -230,12 +259,7 @@ class PawnOnlineController extends Controller
 
         }
 
-        // $notification = array(
-        //     'message' => 'บันทึกข้อมูลสำเร็จ',
-        //     'alert-type' => 'success'
-        // );
 
-        //return redirect()->route('customer.transaction_history');
 
          // Update Pawn Transaction
             PawnTransaction::create([
@@ -271,8 +295,8 @@ class PawnOnlineController extends Controller
         'branch_id' => 1,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
-        'interest' => 0,
-        'amount' => $pawn_data->total_pawn_amount,
+        'interest' => $request->interest,
+        'amount' => $request->add_amount+$request->interest,//$pawn_data->total_pawn_amount,
         'payment_amount' => $request->add_amount,
         'payment_status' => 'pending',
         'customer_name' => $pawn_data->customer_name,
@@ -308,7 +332,9 @@ class PawnOnlineController extends Controller
     //     return redirect()->route('customer.pawn_add',$pawn_barcode)->with('pawn_data','pawn_add_data','pawn_send_data','count_send_data','add_amount');
 
 
-
+       // Send SMS to customer/Admin
+        //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
+        $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_add_data->pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
 
         $member_id = Auth::guard('member')->id();
         $transaction_type ='';
@@ -378,7 +404,7 @@ class PawnOnlineController extends Controller
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
-                'amount' => $request->total_pawn_amount,
+                'amount' => 0,//$request->total_pawn_amount,
                 'payment_amount' => $request->interest,
                 'payment_method' => $request->payment_method,
                 'payment_date' => $request->payment_date,
@@ -387,6 +413,7 @@ class PawnOnlineController extends Controller
                 'customer_name' => $request->customer_name,
                 'customer_address' => $request->customer_address,
                 'customer_phone' => $request->customer_phone,
+                'id_card' => $request->id_card,
                 'status' => 'paid',
                 'created_at' => Carbon::now(),
             ]);
@@ -428,13 +455,14 @@ class PawnOnlineController extends Controller
         'branch_id' => 1,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
-        'interest' => 0,
-        'amount' => $pawn_data->total_pawn_amount,
+        'interest' => $request->interest,
+        'amount' => $request->add_amount-$request->interest,//$pawn_data->total_pawn_amount,
         'payment_amount' => $request->add_amount,
         'payment_status' => 'pending',
         'customer_name' => $pawn_data->customer_name,
         'customer_address' => $pawn_data->customer_address,
         'customer_phone' => $pawn_data->customer_phone,
+        'id_card' => $request->id_card,
         'status' => 'pending',
         'created_at' => Carbon::now(),
          ]);
@@ -455,6 +483,11 @@ class PawnOnlineController extends Controller
                 'payment_status' =>'pending',
                 'created_at' => Carbon::now(),
             ]);
+
+            // Send SMS to customer/Admin
+            //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
+            $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_add_data->pawn_barcode.' มีการทำรายการเพิ่มเงินต้นกรุณาตรวจสอบ');
+
 
             $member_id = Auth::guard('member')->id();
             $transaction_type ='';
@@ -543,7 +576,7 @@ class PawnOnlineController extends Controller
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
-                'amount' => $request->total_pawn_amount,
+                'amount' => 0,//$request->total_pawn_amount,
                 'payment_amount' => $request->interest,
                 'payment_method' => $request->payment_method,
                 'payment_date' => $request->payment_date,
@@ -552,6 +585,9 @@ class PawnOnlineController extends Controller
                 'customer_name' => $request->customer_name,
                 'customer_address' => $request->customer_address,
                 'customer_phone' => $request->customer_phone,
+                'id_card' => $request->id_card,
+                'yup_id' =>  NULL,
+                'withdrawn_id' =>  NULL,
                 'status' => 'pending',
                 'created_at' => Carbon::now(),
             ]);
@@ -595,8 +631,8 @@ class PawnOnlineController extends Controller
         'branch_id' => 1,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
-        'interest' => 0,
-        'amount' => $pawn_data->total_pawn_amount,
+        'interest' => $request->interest,
+        'amount' => $request->add_amount-$request->interest,//$pawn_data->total_pawn_amount,
         'payment_amount' => $request->add_amount,
         'payment_method' => $request->payment_method,
         'payment_date' => $request->payment_date,
@@ -605,6 +641,7 @@ class PawnOnlineController extends Controller
         'customer_name' => $pawn_data->customer_name,
         'customer_address' => $pawn_data->customer_address,
         'customer_phone' => $pawn_data->customer_phone,
+        'id_card' => $pawn_data->id_card,
         'status' => 'pending',
         'created_at' => Carbon::now(),
          ]);

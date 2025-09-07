@@ -4,10 +4,9 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard | Wisdom Gold</title>
+        <title>Wisdom Gold</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-        <meta content="Themesbrand" name="author" />
+        <meta content="Wisdom Gold " name="ห้างทองกาญจนาภิเษก" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.ico') }}">
 
@@ -29,7 +28,7 @@
 
         @endif
 
-        @if (request()->routeIs('backend.pawn_transaction.index','backend.reports.*','backend.customer.*','backend.member.*','backend.pawn_add.*'))
+        @if (request()->routeIs('backend.pawn_transaction.*','backend.online_transaction.*','backend.reports.*','backend.customer.*','backend.member.*','backend.pawn_add.*'))
         <!-- flatpickr css -->
         <link href="{{ asset('backend/assets/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet" type="text/css">
         @endif
@@ -145,7 +144,7 @@
         <script src="{{ asset('backend/assets/js/pages/faqs_create.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.pawn_transaction.index','backend.reports.*','backend.pawn_add.*',))
+        @if (request()->routeIs('backend.pawn_transaction.*','backend.online_transaction.*','backend.reports.*','backend.pawn_add.*',))
         <!-- flatpickr js -->
         <script src="{{ asset('backend/assets/libs/flatpickr/flatpickr.min.js')}}"></script>
         <script src="{{ asset('backend/assets/js/pages/invoices-list.init.js')}}"></script>
@@ -167,27 +166,27 @@
         <script src="{{ asset('backend/assets/js/pages/report_overview.init.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.reports.pawn_report'))
+        @if (request()->routeIs('backend.reports.pawn_report','backend.reports.pawn_custom_report'))
         <!-- overview_report init -->
         <script src="{{ asset('backend/assets/js/pages/report_pawn.init.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.reports.send_interest_report'))
+        @if (request()->routeIs('backend.reports.interest_report','backend.reports.interest_custom_report'))
         <!-- overview_report init -->
         <script src="{{ asset('backend/assets/js/pages/report_send_interest.init.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.reports.outstanding_interest_report'))
+        @if (request()->routeIs('backend.reports.outstanding_interest_report','backend.reports.outstanding_interest_custom_report'))
         <!-- overview_report init -->
         <script src="{{ asset('backend/assets/js/pages/report_outstanding_interest.init.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.reports.increase_principle_report'))
+        @if (request()->routeIs('backend.reports.increase_principle_report','backend.reports.increase_custom_report'))
         <!-- overview_report init -->
         <script src="{{ asset('backend/assets/js/pages/report_increase_principle.init.js')}}"></script>
         @endif
 
-        @if (request()->routeIs('backend.reports.decrease_principle_report'))
+        @if (request()->routeIs('backend.reports.decrease_principle_report','backend.reports.decrease_custom_report'))
         <!-- overview_report init -->
         <script src="{{ asset('backend/assets/js/pages/report_decrease_principle.init.js')}}"></script>
         @endif

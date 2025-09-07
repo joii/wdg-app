@@ -33,9 +33,10 @@
                         <h4 class="card-title mb-0">รายงานโดยสรุป</h4>
                     </div>
                     <div class="card-body">
-                        <div id="column_chart" data-colors='["#16604A", "#A81818", "#bf9b30","#ffbf00"]' class="apex-charts" dir="ltr"></div>
+                        <div id="column_chart" data-colors='["#e19e0f", "#A81818", "#bf9b30","#ffbf00"]' class="apex-charts" dir="ltr"></div>
                     </div>
                 </div><!--end card-->
+
                 <script>
                     /* Pass data to JavaScript to generate bar graph*/
                    window.appData = @json($data);

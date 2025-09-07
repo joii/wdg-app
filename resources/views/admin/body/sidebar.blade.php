@@ -38,12 +38,12 @@
                                 @if (Auth::guard('admin')->user()->can('ga.index'))
                                 <li><a href="{{ route('backend.ga.index') }}" data-key="t-ga" title="GA">Google Analytics</a></li>
                                 @endif
-                                @if (Auth::guard('admin')->user()->can('facebook_pixel.index'))
+                                {{-- @if (Auth::guard('admin')->user()->can('facebook_pixel.index'))
                                 <li><a href="{{ route('backend.facebook_pixel.index') }}" data-key="t-facebook-meta" title="Facebook Pixel">Facebook Pixel</a></li>
-                                 @endif
-                                 @if (Auth::guard('admin')->user()->can('og_meta_tag.index'))
+                                 @endif --}}
+                                 {{-- @if (Auth::guard('admin')->user()->can('og_meta_tag.index'))
                                 <li><a href="{{ route('backend.og_meta_tag.index') }}" data-key="t-og-meta" title="Open Graph Meta Tags">Open Graph Meta Tags</a></li>
-                                 @endif
+                                 @endif --}}
                             </ul>
                         </li>
                         @if (Auth::guard('admin')->user()->can('interest_rate.index'))
@@ -109,7 +109,7 @@
                     </ul>
                 </li>
                 @endif
-                 @if (Auth::guard('admin')->user()->can('webcontent.index'))
+                 @if (Auth::guard('admin')->user()->can('webcontent.all'))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="fas fa-file-code"></i>
@@ -124,7 +124,7 @@
                         <li><a href="#" data-key="t-contact">ติดต่อเรา</a></li>
                         <li><a href="{{ route('backend.banner.index') }}" data-key="t-banner" @if(request()->routeIs('backend.banner.*')) class="active" @endif>แบนเนอร์</a></li>
                         <li><a href="{{ route('backend.gold_price.index') }}" data-key="t-price">ราคาทอง</a></li>
-                        <li><a href="#" data-key="t-policy">เงื่อนไขและนโยบาย</a></li>
+                        {{-- <li><a href="#" data-key="t-policy">เงื่อนไขและนโยบาย</a></li> --}}
 
                     </ul>
                 </li>

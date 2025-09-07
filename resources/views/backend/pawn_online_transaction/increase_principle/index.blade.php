@@ -31,24 +31,26 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="mb-4">
+                                        <a href="{{ route('backend.reports.increase_principle_report') }}">
                                         <button type="button" class="btn btn-light waves-effect waves-light">ออกรายงาน</button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="d-flex align-items-center gap-1 mb-4">
-                                        <div class="input-group datepicker-range">
-                                            <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter">
-                                            <button class="input-group-text" id="date1" data-toggle><i class="bx bx-calendar-event"></i></button>
-                                        </div>
+                                        <form action="{{ route('backend.online_transaction.increase_custom') }}" method="POST" id="custom_transaction">
+                                            @csrf
+                                            <div class="input-group datepicker-range">
+                                                <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
+                                                <button class="input-group-text" id="date1" data-toggle type="button"><i class="bx bx-calendar-event"></i></button>
+                                            </div>
+                                        </form>
                                         <div class="dropdown">
                                             <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bx bx-dots-horizontal-rounded"></i>
                                             </a>
-
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#" id="date_filter_submit">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                                <li><a class="dropdown-item" href="#" id="date_filter_submit" >Action</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -89,7 +91,7 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.contract',[$item->pawn_barcode,$item->token_id]) }}" target="_blank">หนังสือสัญญา</a></li>
                                                         <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
                                                         {{-- <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.detail',$item->token_id) }}" >รายละเอียด</a></li> --}}
                                                         <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.edit',$item->token_id) }}">แก้ไข</a></li>
@@ -119,9 +121,8 @@
  </div>
  <script>
     $('#date_filter_submit').click(function() {
-  var inputValue = $('input[name="date_filter"]').val();
-  // Do something with inputValue, like logging it to the console
-  alert(inputValue);
-});
+     var inputValue = $('input[name="date_filter"]').val();
+        $('#custom_transaction').submit();
+    });
 </script>
  @endsection

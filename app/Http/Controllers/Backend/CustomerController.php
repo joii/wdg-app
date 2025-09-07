@@ -42,4 +42,12 @@ class CustomerController extends Controller
         return view('backend.customer.detail',compact('data','pawn_data'));
     }
 
+    public function CustomerInformation(String $customer_name,String $customer_phone){
+        $data = Customers::where('tel',$customer_phone)->first();
+        $pawn_data = array();
+        $pawn_data = PawnData::where('customer_phone',$customer_phone)->get();
+
+        return view('backend.customer.customer_info',compact('data','pawn_data'));
+    }
+
 }

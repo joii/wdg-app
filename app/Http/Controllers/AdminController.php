@@ -12,46 +12,181 @@ use App\Models\PawnInterestData;
 use App\Models\PawnOnlineTransaction;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function AdminDashboard(){
-        $pawn_data = PawnData::take(10)->orderBy('id','desc')->get();
-        // dd($pawn_data);  //For Debugging Purposes
-        $pawn_amount = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+
+        // For Table Data
+         $keyword = "quarter";
+         $startDate = Carbon::now()->subDays(90);
+         $endDate = Carbon::now();
+         $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
+            ->orderBy('pawn_date','desc')
+            ->get();
+        //$pawn_data = PawnData::take(10)->orderBy('id','desc')->get();
+
+        // Pawn Monthly Summary
+        $pawn_total_amount = PawnData::whereMonth('pawn_date', Carbon::now()->month)
                      ->whereYear('pawn_date', Carbon::now()->year)
                      ->sum('total_pawn_amount_first');
 
-        // Pawn
-        // เดือนนี้
-        $currentMonthTotal = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+        // 1.Pawn Summary
+        // Total Amount
+        $current_month_total_amount = PawnData::whereMonth('pawn_date', Carbon::now()->month)
                                 ->whereYear('pawn_date', Carbon::now()->year)
                                 ->sum('total_pawn_amount_first');
 
-        // เดือนที่แล้ว
-        $lastMonth = Carbon::now()->subMonth();
-        $lastMonthTotal = PawnData::whereMonth('pawn_date', $lastMonth->month)
-                            ->whereYear('pawn_date', $lastMonth->year)
-                            ->sum('total_pawn_amount_first');
+        // Number of Transaction
+        $pawn_total_transaction = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+                                ->whereYear('pawn_date', Carbon::now()->year)
+                                ->count();
 
-        // หาค่าส่วนต่าง
-        $pawn_difference = $currentMonthTotal - $lastMonthTotal;
+        // 2.Interest Summary
+        // Total Amount
+        $interest_total_amount = PawnOnlineTransaction::where('transaction_type','intr')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        // Number of Transaction
+        $interest_total_transaction  = PawnOnlineTransaction::where('transaction_type','intr')->whereMonth('created_at', Carbon::now()->month)
+        ->whereYear('created_at', Carbon::now()->year)->count();
 
-        // Interest
-        $interest_amount = PawnInterestData::whereMonth('pawn_cal_interest_date', Carbon::now()->month)
-                     ->whereYear('pawn_cal_interest_date', Carbon::now()->year)->sum('interest');
-        // เดือนที่แล้ว
-        $interest_last_month = PawnInterestData::whereMonth('pawn_cal_interest_date',$lastMonth->month)
-                     ->whereYear('pawn_cal_interest_date', $lastMonth->year)->sum('interest');
-        // หาค่าส่วนต่าง
-        $interest_difference =  $interest_amount-$interest_last_month;
+        // 3.Increase and Decrease Summary
+        // Total Amount
+        $increase_total_amount = PawnOnlineTransaction::where('transaction_type','inc')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        $decrease_total_amount = PawnOnlineTransaction::where('transaction_type','dec')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        // Increase and Decrease Number of Transaction
+        $increase_total_transaction = PawnOnlineTransaction::where('transaction_type','inc')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->count();
+        $decrease_total_transaction = PawnOnlineTransaction::where('transaction_type','dec')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->count();
+
+        // 4.Import Logs
+        $import_log = DB::table('import_logs')->orderBy('created_at','desc')->get();
+
+        // 5. Overdue Pawns Interests
+        $range = 15;
+        $endDate = Carbon::now(); // วันที่ปัจจุบัน
+        $startDate = Carbon::now()->subDays($range); // ย้อนหลัง 30 วัน
+
+        $overdue = DB::table('pawn_interest_data')
+            ->whereYear('pawn_expire_date', 2025)
+            ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+            ->select('*')
+            ->distinct()
+            ->get();
+
+        return view('admin.index', compact('pawn_data','pawn_total_amount','pawn_total_transaction','interest_total_amount','interest_total_transaction','increase_total_amount','increase_total_transaction','decrease_total_amount','decrease_total_transaction','import_log','overdue','keyword','range'));
+
+    }//End Method
+
+        public function AdminLatestDashboard(Request $request){
+
+        // keywords & range
+        $keyword = 'quarter';
+        if(isset($request->pawn_range)){
+            $keyword = $request->pawn_range;
+        }
+        if(isset($request->overdue_range)){
+            $keyword = $request->overdue_range;
+        }
+
+        $range = 15;
+         if(isset($request->overdue_range)){
+            $range = $request->overdue_range;
+        }
+        if(isset($request->overdue_range)){
+            $range = $request->overdue_range;
+        }
+
+        // For Table Data
+        // keyword : today , yesterday,week,month
+        $endDate = Carbon::now(); // วันที่ปัจจุบัน
+        switch($keyword){
+            case 'today':
+                $startDate = Carbon::now();
+                $endDate = Carbon::now();
+                break;
+            case 'yesterday':
+                $startDate = Carbon::now()->subDays(1);
+                $endDate = Carbon::now();
+                break;
+            case 'week':
+                $startDate = Carbon::now()->startOfWeek();
+                $endDate = Carbon::now()->endOfWeek();
+                break;
+            case'month':
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfMonth();
+                break;
+            case'quarter':
+                $startDate = Carbon::now()->subDays(90);
+                $endDate = Carbon::now()->endOfMonth();
+                break;
+            default:
+                $startDate = Carbon::now()->subDays(90);
+                $endDate = Carbon::now();
+        }
+        $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
+            ->orderBy('pawn_date','desc')
+            ->get();
 
 
+       // $pawn_data = PawnData::take(10)->orderBy('id','desc')->get();
 
-        $increase_amount = PawnOnlineTransaction::where('transaction_type','inc')->sum('amount');
-        $decrease_amount = PawnOnlineTransaction::where('transaction_type','dec')->sum('amount');
+        // Pawn Monthly Summary
+        $pawn_total_amount = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+                     ->whereYear('pawn_date', Carbon::now()->year)
+                     ->sum('total_pawn_amount_first');
 
-        return view('admin.index', compact('pawn_data','pawn_amount','interest_amount','increase_amount','decrease_amount','pawn_difference','interest_difference'));
+        // 1.Pawn Summary
+        // Total Amount
+        $current_month_total_amount = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+                                ->whereYear('pawn_date', Carbon::now()->year)
+                                ->sum('total_pawn_amount_first');
+
+        // Number of Transaction
+        $pawn_total_transaction = PawnData::whereMonth('pawn_date', Carbon::now()->month)
+                                ->whereYear('pawn_date', Carbon::now()->year)
+                                ->count();
+
+        // 2.Interest Summary
+        // Total Amount
+        $interest_total_amount = PawnOnlineTransaction::where('transaction_type','intr')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        // Number of Transaction
+        $interest_total_transaction  = PawnOnlineTransaction::where('transaction_type','intr')->whereMonth('created_at', Carbon::now()->month)
+        ->whereYear('created_at', Carbon::now()->year)->count();
+
+        // 3.Increase and Decrease Summary
+        // Total Amount
+        $increase_total_amount = PawnOnlineTransaction::where('transaction_type','inc')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        $decrease_total_amount = PawnOnlineTransaction::where('transaction_type','dec')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->sum('payment_amount');
+        // Increase and Decrease Number of Transaction
+        $increase_total_transaction = PawnOnlineTransaction::where('transaction_type','inc')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->count();
+        $decrease_total_transaction = PawnOnlineTransaction::where('transaction_type','dec')->whereMonth('created_at', Carbon::now()->month)
+                     ->whereYear('created_at', Carbon::now()->year)->count();
+
+        // 4.Import Logs
+        $import_log = DB::table('import_logs')->orderBy('created_at','desc')->get();
+
+        // 5. Overdue Pawns Interests
+        $endDate = Carbon::now(); // วันที่ปัจจุบัน
+        $startDate = Carbon::now()->subDays($range); // ย้อนหลัง 30 วัน
+        $overdue = DB::table('pawn_interest_data')
+            ->whereYear('pawn_expire_date', 2025)
+            ->whereBetween('pawn_expire_date', [$startDate,$endDate])
+            ->select('*')
+            ->distinct()
+            ->get();
+
+        return view('admin.index', compact('pawn_data','pawn_total_amount','pawn_total_transaction','interest_total_amount','interest_total_transaction','increase_total_amount','increase_total_transaction','decrease_total_amount','decrease_total_transaction','import_log','overdue','keyword','range'));
+
     }//End Method
 
     public function AdminLogin(){

@@ -30,9 +30,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm">
-                                    <div class="mb-4">
+                                    {{-- <div class="mb-4">
                                         <button type="button" class="btn btn-light waves-effect waves-light">ออกรายงาน</button>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="d-flex align-items-center gap-1 mb-4">
@@ -85,7 +85,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ route('backend.customer.detail',$item->id) }}">รายละเอียด</a></li>
-                                                        <li><a class="dropdown-item" href="{{ route('backend.customer.detail',$item->id) }}">แก้ไข</a></li>
+                                                        {{-- <li><a class="dropdown-item" href="{{ route('backend.customer.detail',$item->id) }}">แก้ไข</a></li> --}}
                                                     </ul>
                                                 </div>
                                             </td>

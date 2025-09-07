@@ -36,22 +36,23 @@
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="d-flex align-items-center gap-1 mb-4">
-                                        <div class="input-group datepicker-range">
-                                            <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter">
-                                            <button class="input-group-text" id="date1" data-toggle><i class="bx bx-calendar-event"></i></button>
-                                        </div>
-                                        <div class="dropdown">
-                                            <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </a>
-
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="#" id="date_filter_submit">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
+                                    <form action="{{ route('backend.pawn_transaction.pawn_custom_transaction') }}" method="POST" id="custom_transaction">
+                                        @csrf
+                                    <div class="input-group datepicker-range">
+                                        <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
+                                        <button class="input-group-text" id="date1" data-toggle type="button"><i class="bx bx-calendar-event"></i></button>
                                     </div>
+                                    </form>
+                                    <div class="dropdown">
+                                        <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bx bx-dots-horizontal-rounded"></i>
+                                        </a>
+
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#" id="date_filter_submit" >Action</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                             <!-- end row -->
@@ -62,7 +63,7 @@
                                         <tr class="bg-transparent">
 
                                                 <th>เลขที่สัญญา</th>
-                                                <th>วันที่ทำสัญญา</th>
+                                                <th>วันที่ทำสัญญา/วันที่ต่อสัญญา</th>
                                                 <th>รหัสบาร์โค้ด</th>
                                                 <th>สินค้า</th>
                                                 <th>น้ำหนัก</th>
@@ -76,7 +77,7 @@
                                         @foreach ($pawn_data as $item)
                                         <tr>
                                                 <td>{{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('y') }}{{sprintf('%05d', $item->pawn_id) }}</td>
-                                                <td> {{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F Y') }}</td>
+                                                <td> {{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F Y') }}<br/>{{ \Carbon\Carbon::parse($item->pawn_date_cal_interest)->thaidate('j F Y') }}</td>
                                                 <td>{{ $item->pawn_barcode }}</td>
                                                 <td>{{ $item->remarks }}</td>
                                                 <td>{{ $item->total_weight }}</td>
@@ -99,31 +100,6 @@
                                         </tr>
                                         @endforeach
 
-                                        {{-- <tr>
-                                            <td>68300873</td>
-                                                <td>-</td>
-                                                <td>AHEWGJ974</td>
-                                                <td width="20%">*เบนซ์ทรงเครื่องลงยาแดง/หักลงยา 0.4G.*</td>
-                                                <td>7.6</td>
-                                                <td>18000</td>
-                                                <td>น.ส. เบญจวรรณ  คงคาพันธ์</td>
-
-
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="bx bx-dots-horizontal-rounded"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="#">หนังสือสัญญา</a></li>
-                                                        <li><a class="dropdown-item" href="#">พิมพ์</a></li>
-                                                        <li><a class="dropdown-item" href="#">รายละเอียด</a></li>
-                                                        <li><a class="dropdown-item" href="#">แก้ไข</a></li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr> --}}
-
                                     </tbody>
                                 </table>
                             </div>
@@ -142,9 +118,8 @@
  </div>
  <script>
     $('#date_filter_submit').click(function() {
-  var inputValue = $('input[name="date_filter"]').val();
-  // Do something with inputValue, like logging it to the console
-  alert(inputValue);
-});
+     var inputValue = $('input[name="date_filter"]').val();
+        $('#custom_transaction').submit();
+    });
 </script>
  @endsection

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\PawnInterestDataRequest;
 use App\Models\PawnInterestData;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class PawnInterestDataController extends Controller
@@ -43,8 +45,11 @@ class PawnInterestDataController extends Controller
         $csvFile = storage_path('app/public/import/'.$file);
 
 
-        if (file_exists($csvFile)) {
-                Excel::import(new \App\Imports\PawnInterestDataImport, $csvFile);
+            try{
+
+
+                if (file_exists($csvFile)) {
+                 Excel::import(new \App\Imports\PawnInterestDataImport($file), $csvFile);
 
                 $fileProcessed = storage_path("app/public/import/processed/{$file}");
 
@@ -70,19 +75,28 @@ class PawnInterestDataController extends Controller
                 ], 200);
             }
 
+            }catch (\Throwable $e) {
+                // Log failed
+                Log::error("CSV import failed for {$file}", [
+                    'error' => $e->getMessage(),
+                ]);
 
-        // try {
-        //     $csvFile = $request->file('csvFile');
-        //     Excel::import(new \App\Imports\PawnInterestDataImport, $csvFile);
-        // } catch (\Throwable $th) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => $th->getMessage()
-        //     ], 400);
-        // }
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Operation successful.'
-        // ], 201);
+                if($file==null){
+                    $file = "PrawnInterest_".date('Ymd').'_'.date('His').'.csv';
+                }
+
+                DB::table('import_logs')->insert([
+                    'filename' => $file,
+                    'status'   => 'failed',
+                    'error'    => $e->getMessage(),
+                    'message'    => $file.' not found.',
+                    'code'       => 404, // HTTP Status Code 200 เสร็จสิ้น
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+
+
     }
 }

@@ -15,7 +15,8 @@ class PawnOnlineTransactionManagementController extends Controller
     // ตั้งชื่อไฟล์แบบมีวันที่เวลา
     $timestamp = now()->format('Ymd_His');
     $fileName = "PawnOnlineTransaction_{$timestamp}.csv";
-    $filePath = "export/{$fileName}";
+    $folderName = now()->format('Ymd');
+    $filePath = "export/{$folderName}/{$fileName}";
 
     // ตรวจสอบว่ามีโฟลเดอร์ export แล้วหรือยัง (ถ้ายังให้สร้าง)
     if (!Storage::disk('public')->exists('export')) {

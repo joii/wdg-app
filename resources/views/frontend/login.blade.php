@@ -9,7 +9,7 @@
                     <p class="text-note">กรุณาล็อคอินเข้าสู่เพื่อทำรายการ</p>
                 </div>
 
-                <form class="row g-3 form-login" method="post" action="{{ route('member.login.attempt') }}">
+                {{-- <form class="row g-3 form-login" method="post" action="{{ route('member.login.attempt') }}">
                     @csrf
                     <div class="col-12">
                         <div class="form-group">
@@ -55,12 +55,45 @@
                             <img class="icons svg-js" src="{{ asset('frontend/assets/img/icons/icon-facebook-circle.svg') }}" alt="">
                             Facebook
                         </a>
-                    </div> --}}
+                    </div>
 
                     <div class="col-12">
                         <p class="mt-2 text-center" style="color: #191D23;">ลงทะเบียนสมาชิก? <a class="link-primary link" href="{{ route('member.register') }}">คลิกที่นี่</a></p>
                     </div>
-                </form><!--row-->
+
+                </form><!--row--> --}}
+                <div class="col-12">
+                      <!-- request.html -->
+
+                      @if ($errors->any())
+                            <div style="color:red;">
+                                {{ $errors->first() }}
+                            </div>
+                        @endif
+
+                          <form class="row g-3 " method="post" action="{{ route('otp.request') }}">
+                            @csrf
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="title">เบอร์โทร</label>
+                                    <input type="text" class="form-control" name="phone">
+                                </div>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <button class="btn btn-green-dark w-100" type="submit" >
+                                    ขอ OTP
+                                </button>
+                            </div>
+                        </form>
+                         <div class="col-12">
+                        <p class="mt-2 text-center" style="color: #191D23;">ลงทะเบียนสมาชิก? <a class="link-primary link" href="{{ route('member.register') }}">คลิกที่นี่</a></p>
+                    </div>
+
+
+
+
+
+                    </div>
             </div><!--boxed-->
         </div>
     </div><!--container-->

@@ -36,14 +36,14 @@ var columnColors = getChartColorsArray("#column_chart"),
             ],
         },
         yaxis: {
-            title: { text: "จำนวน (รายการ)", style: { fontWeight: "500" } },
+            title: { text: "จำนวน (บาท)", style: { fontWeight: "500" } },
         },
         grid: { borderColor: "#f1f1f1" },
         fill: { opacity: 1 },
         tooltip: {
             y: {
                 formatter: function (e) {
-                    return "จำนวน " + e + " รายการ";
+                    return "จำนวน " + e + " บาท";
                 },
             },
         },

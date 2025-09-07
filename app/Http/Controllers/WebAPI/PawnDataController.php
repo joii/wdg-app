@@ -7,6 +7,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Http\Requests\PawnDataRequest;
 use App\Models\PawnData;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PawnDataController extends Controller
 {
@@ -42,9 +44,13 @@ class PawnDataController extends Controller
         $file = $this->findLatestImportFile();
         $csvFile = storage_path('app/public/import/'.$file);
 
+
+        try{
+
+
         if (file_exists($csvFile)) {
 
-            Excel::import(new \App\Imports\PawnDataImport, $csvFile);
+            Excel::import(new \App\Imports\PawnDataImport($file), $csvFile);
 
             // Move the imported file to the processed folder
             $fileProcessed = storage_path("app/public/import/processed/{$file}");
@@ -70,5 +76,31 @@ class PawnDataController extends Controller
         ], 200);
         }
 
+
+
+        }catch (\Throwable $e) {
+                // Log failed
+                Log::error("CSV import failed for {$file}", [
+                    'error' => $e->getMessage(),
+                ]);
+
+                if($file==null){
+                    $file = "Prawn_".date('Ymd').'_'.date('His').'.csv';
+                }
+
+                DB::table('import_logs')->insert([
+                    'filename' => $file,
+                    'status'   => 'failed',
+                    'error'    => $e->getMessage(),
+                    'message'    => $file.' not found.',
+                    'code'       => 404, // HTTP Status Code 200 เสร็จสิ้น
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+
     }
+
+
 }

@@ -183,6 +183,7 @@
                                 <input type="hidden" name="customer_name" value="{{ $pawn_data->customer_name }}">
                                 <input type="hidden" name="customer_address" value="{{ $pawn_data->customer_address }}">
                                 <input type="hidden" name="customer_phone" value="{{ $pawn_data->customer_phone }}">
+                                <input type="hidden" name="id_card" value="{{ $pawn_data->id_card }}">
                                 <input type="submit" class="btn btn-green-dark w-100 mx-auto" style="max-width:370px" value="ยืนยันการทำธุรกรรม">
 
                                 </input>

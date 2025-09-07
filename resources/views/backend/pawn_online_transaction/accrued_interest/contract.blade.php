@@ -50,7 +50,7 @@
                             </div>
                             <hr class="my-4">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <h5 class="font-size-15">เลขที่บาร์โค้ด:</h5>
                                         <p>{{ $data->pawn_barcode }}</p>
@@ -61,17 +61,32 @@
 
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div>
                                         <h5 class="font-size-15">วันที่ทำสัญญา:</h5>
                                         <p>
-                                            {{ \Carbon\Carbon::parse($data->transaction_date)->thaidate('l j F Y') }}
+                                            {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('l j F Y') }}
                                         </p>
                                     </div>
+                                    <div>
+                                        <h5 class="font-size-15">วันที่ต่อสัญญา:</h5>
+                                        <p>
+                                            {{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->thaidate('l j F Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+
                                     <div>
                                         <h5 class="font-size-15">สาขาที่ทำสัญญา:</h5>
                                         <p>สาขา 1</p>
 
+                                    </div>
+                                     <div >
+                                        @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)
+                                           <h2 class="text-danger">ยกเลิกสัญญาแล้ว</h2>
+                                           <p> ยกเลิกวัน{{ \Carbon\Carbon::parse($data->erased_date)->thaidate('l j F Y') }}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -136,6 +151,12 @@
                     <!-- end card -->
                 </div>
                 <!-- end col -->
+                 <div class="d-print-none mt-3 mb-3">
+                    <div class="float-end">
+                        <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></a>
+
+                    </div>
+                 </div>
             </div>
             <!-- end row -->
 

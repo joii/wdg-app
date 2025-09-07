@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\PawnSendInterestData;
+use App\Events\CsvImported;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -10,12 +11,26 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterImport;
+use Maatwebsite\Excel\Events\ImportFailed;
+use App\Listeners\LogCsvImportFailed;
+
 
 
 HeadingRowFormatter::default('none');
 
-class PawnSendInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,WithChunkReading,WithBatchInserts
+class PawnSendInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,WithChunkReading,WithBatchInserts,WithEvents
 {
+
+    protected $filename;
+
+    // รับชื่อไฟล์เข้ามา
+    public function __construct(string $filename)
+    {
+        $this->filename = $filename;
+    }
+
     private function parseNumeric($value)
     {
         if ($value === null || $value === '' || strtoupper($value) === 'NULL') {
@@ -24,11 +39,7 @@ class PawnSendInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,W
 
         return is_numeric($value) ? $value : null;
     }
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+
     public function model(array $row)
     {
         return new PawnSendInterestData([
@@ -44,6 +55,20 @@ class PawnSendInterestDataImport implements ToModel,WithHeadingRow,WithUpserts,W
             'total_pawn_amount' => $row['Total_PrawnAmount'],
             'pawn_card_no' => $row['PrawnCard_No'],
         ]);
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterImport::class => function(AfterImport $event) {
+                // Trigger Event หลัง Import เสร็จ  พร้อมชื่อไฟล์ dynamic
+               event(new CsvImported($this->filename)); // Event Generic + Dynamic Parameter
+               //event(new PawnSub100MCsvImported($this->filename));  // use case
+
+            },
+            ImportFailed::class => [LogCsvImportFailed::class, 'handle'],
+
+        ];
     }
 
     public function chunkSize(): int

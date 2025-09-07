@@ -10,9 +10,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Http\Request;
 use App\Services\SMS\ThaiBulkSmsService;
+use App\Services\OtpService;
+use App\Models\Otp;
 
 class AuthController extends Controller
 {
+
+    // protected $otpService;
+
+    // public function __construct(OtpService $otpService)
+    // {
+    //     $this->otpService = $otpService;
+    // }
+
     public function showLoginForm()
     {
         return view('frontend.login');
@@ -71,6 +81,8 @@ class AuthController extends Controller
 
         // ]);
 
+        $otp = rand(100000,999999);
+
         Member::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
@@ -82,7 +94,7 @@ class AuthController extends Controller
         ]);
 
         // Send SMS to user about vierify link
-        $message = "กรุณายืนยันตัวตนที่ https://app.wisdom-gold.com/member/login";
+        $message = "รหัสยืนยันตัวตน คือ ".$otp;
         $this->SendSMS($request->phone,$message);
 
         $notification = array(
@@ -99,6 +111,70 @@ class AuthController extends Controller
         return redirect()->route('member.login')->with('success','Logout Successfully');
 
     }//End Method
+
+
+    public function requestOtp2(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|digits_between:9,12'
+        ]);
+
+        $phone = $request->phone;
+
+        $otp = new OtpService();
+        $result = $otp->requestOtp($phone);
+
+
+
+        if ($result && isset($result['token'])) {
+            // redirect ไปหน้า verify พร้อม token
+            return redirect()->route('otp.verify.form', ['token' => $result['token'], 'phone' => $phone]);
+        }
+
+        return back()->withErrors(['msg' => 'Request OTP failed, please try again.']);
+    }
+
+    public function showVerifyForm(Request $request)
+    {
+        return view('frontend.verify_otp', [
+            'token' => $request->query('token'), // รับ token จาก redirect
+            'phone' => $request->query('phone'),
+        ]);
+    }
+
+
+
+    // Verify OTP
+    public function verifyOtp2(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'otp_code' => 'required|digits:6',
+        ]);
+
+        $phone = $request->phone;
+
+        $otp = new OtpService();
+        $result = $otp->verifyOtp($request->token, $request->otp_code);
+
+        if ($result && ($result['status'] ?? null) === 'success') {
+
+             // หา user จากเบอร์โทร
+            $member = Member::where('phone', $request->phone)->first();
+
+            if (!$member) {
+                return back()->withErrors(['phone' => 'ไม่พบผู้ใช้งาน'.$phone]);
+            }
+
+            // login ด้วย guard member
+            Auth::guard('member')->login($member);
+            return redirect()->route('member.member_dashboard')->with('success','เข้าสู่ระบบเรียบร้อย');
+            //return redirect('/home')->with('status', 'OTP verified successfully!');
+        }
+
+        return back()->withErrors(['msg' => 'Invalid OTP code, please try again.']);
+    }
+
 
 
 }

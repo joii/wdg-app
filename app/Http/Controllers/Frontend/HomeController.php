@@ -9,6 +9,10 @@ use Carbon\Carbon;
 use App\Models\FAQCategory;
 use App\Models\faqs;
 use App\Models\Banner;
+use App\Models\FacebookPixel;
+use App\Models\GoogleAnalytic;
+use App\Models\GoogleTagManager;
+use App\Models\MetaTag;
 
 class HomeController extends Controller
 {
@@ -24,6 +28,8 @@ class HomeController extends Controller
         // $yesterday = Carbon::yesterday();
         // $goldPricesYesterday = GoldPrice::where('date', '=', $yesterday)->orderBy('id','desc')->get();
         // $diff = ($goldPrices[0]->buy_gold_bar*1)-($goldPricesYesterday[0]->buy_gold_bar*1); // Calculates the difference in price between the current and following days
+
+
 
         // Gold Price Data
         $goldPrices = GoldPrice::orderBy('id','desc')->get();

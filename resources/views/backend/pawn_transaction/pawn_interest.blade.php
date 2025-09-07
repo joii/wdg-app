@@ -64,9 +64,9 @@
                                 <div class="col-sm-6">
                                     <div>
                                         <div>
-                                            <h5 class="font-size-15">วันที่ทำสัญญา:</h5>
+                                            <h5 class="font-size-15">วันที่ทำสัญญาขายฝาก/วันที่ต่อสัญญา:</h5>
                                             <p>
-                                                {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('l j F Y') }}
+                                                {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('l j F Y') }}/{{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->thaidate('j F Y') }}
                                             </p>
                                         </div>
 
@@ -81,13 +81,14 @@
                             <hr class="my-4">
                             <div class="py-2 mt-3">
                                 <h5 class="font-size-15">รายการชำระดอกทั้งหมด</h5>
+                                <p>คำนวณดอกเบี้ย ณ วันที่ :  {{ \Carbon\Carbon::parse($pawn_interest_data[0]->pawn_cal_interest_date)->thaidate('j F Y') }}</p>
                             </div>
                             <div class="p-4 border rounded">
                                 <div class="table-responsive">
                                     <table class="table table-nowrap align-middle mb-0">
                                         <thead>
                                             <tr>
-                                                <th style="width: 70px;">ครั้งที่</th>
+                                                <th style="width: 70px;">จำนวนเดือน</th>
                                                 <th>วันที่ครบกำหนดชำระ</th>
                                                 <th>ยอดชำระ(บาท)</th>
                                                 <th class="text-end" style="width: 120px;">สถานะ</th>
@@ -100,7 +101,8 @@
                                             <tr>
                                                 <th scope="row">{{ $key+1 }}</th>
                                                 <td>  {{-- {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('j F Y') }} --}}
-                                                    {{ \Carbon\Carbon::parse($data->pawn_date)->addDays(30*($key+1))->thaidate('j F Y') }}
+                                                    {{-- {{ \Carbon\Carbon::parse($data->pawn_date)->addDays(30*($key+1))->thaidate('j F Y') }} --}}
+                                                    {{ \Carbon\Carbon::parse($item->pawn_expire_date)->thaidate('j F Y') }}
                                                 </td>
                                                 <td>{{ $item->interest }}</td>
                                                 <td class="text-end"><a class="btn btn-danger btn-rounded waves-effect waves-light">รอการชำระ</a></td>

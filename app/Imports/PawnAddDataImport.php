@@ -10,17 +10,25 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Carbon\Carbon;
+use App\Events\CsvImported;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterImport;
+use Maatwebsite\Excel\Events\ImportFailed;
+use App\Listeners\LogCsvImportFailed;
 
 
 HeadingRowFormatter::default('none');
 
-class PawnAddDataImport implements ToModel,WithHeadingRow, WithUpserts, WithChunkReading, WithBatchInserts
+class PawnAddDataImport implements ToModel,WithHeadingRow, WithUpserts, WithChunkReading, WithBatchInserts,WithEvents
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+    protected $filename;
+
+    // รับชื่อไฟล์เข้ามา
+    public function __construct(string $filename)
+    {
+        $this->filename = $filename;
+    }
+
     public function model(array $row)
     {
 
@@ -36,6 +44,21 @@ class PawnAddDataImport implements ToModel,WithHeadingRow, WithUpserts, WithChun
 
         ]);
     }
+
+     public function registerEvents(): array
+    {
+        return [
+            AfterImport::class => function(AfterImport $event) {
+                // Trigger Event หลัง Import เสร็จ  พร้อมชื่อไฟล์ dynamic
+               event(new CsvImported($this->filename)); // Event Generic + Dynamic Parameter
+               //event(new PawnSub100MCsvImported($this->filename));  // use case
+
+            },
+            ImportFailed::class => [LogCsvImportFailed::class, 'handle'],
+
+        ];
+    }
+
 
     public function chunkSize(): int
     {

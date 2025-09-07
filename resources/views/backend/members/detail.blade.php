@@ -40,8 +40,9 @@
                                                 <hr/>
                                                 <p>
                                                     <strong>ชื่อ:</strong> {{ $data->firstname }}<br/>
-                                                     <strong>นามสกุล:</strong> {{ $data->lastname }}<br/>
-                                                    <strong>เบอร์โทร:</strong> {{ $data->phone }}<br/>
+                                                    <strong>นามสกุล:</strong> {{ $data->lastname }}<br/>
+                                                    <strong>เบอร์โทรติดต่อ:</strong> {{ $data->phone }}<br/>
+                                                    <strong>เบอร์โทรที่ใช้ทำธุรกรรม:</strong> {{ $data->registered_phone }}<br/>
                                                 </p>
 
 
