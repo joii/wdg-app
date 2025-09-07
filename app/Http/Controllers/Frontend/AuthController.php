@@ -17,11 +17,14 @@ class AuthController extends Controller
 {
 
     // protected $otpService;
+    protected $ThaiBulkSmsService;
 
     // public function __construct(OtpService $otpService)
     // {
     //     $this->otpService = $otpService;
     // }
+
+
 
     public function showLoginForm()
     {
@@ -56,13 +59,14 @@ class AuthController extends Controller
 
 
 
-     public function SendSMS($phone,$message)
-    {
-        $sms = new ThaiBulkSmsService();
-        $response = $sms->send($phone,$message);
+    //  public function SendSMS($phone,$message)
+    // {
+    //    // $sms = new ThaiBulkSmsService();
+    //    // $response = $sms->send($phone,$message);
+    //    // $this->ThaiBulkSmsService->sendSMS($phone,$message);
 
-        return response()->json($response);
-    }
+    //     return response()->json($response);
+    // }
 
 
      public function showRegisterForm()
@@ -94,8 +98,9 @@ class AuthController extends Controller
         ]);
 
         // Send SMS to user about vierify link
-        $message = "รหัสยืนยันตัวตน คือ ".$otp;
-        $this->SendSMS($request->phone,$message);
+       // $message = "รหัสยืนยันตัวตน คือ ".$otp;
+       // $this->SendSMS($request->phone,$message);
+        //$this->ThaiBulkSmsService->sendSMS($request->phone,$message);
 
         $notification = array(
             'message' => 'Registration Successful! Please Login to Continue.  Click here to Login.  ',
