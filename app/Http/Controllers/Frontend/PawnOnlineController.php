@@ -586,8 +586,8 @@ class PawnOnlineController extends Controller
                 'customer_address' => $request->customer_address,
                 'customer_phone' => $request->customer_phone,
                 'id_card' => $request->id_card,
-                'yup_id' =>  NULL,
-                'withdrawn_id' =>  NULL,
+                //'yup_id' =>  NULL,
+                //'withdrawn_id' =>  NULL,
                 'status' => 'pending',
                 'created_at' => Carbon::now(),
             ]);
