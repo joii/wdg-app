@@ -9,6 +9,7 @@ function getChartColorsArray(e) {
 }
 
 const data = window.appData;// Data from controller
+
 var columnColors = getChartColorsArray("#column_chart"),
     options = {
         chart: { height: 350, type: "bar", toolbar: { show: !1 } },
@@ -16,15 +17,15 @@ var columnColors = getChartColorsArray("#column_chart"),
         dataLabels: { enabled: !1 },
         stroke: { show: !0, width: 2, colors: ["transparent"] },
         series: [
-            { name: "ต่อดอก", data: data[0] },
-            { name: "ส่งดอก", data: data[1] },
+            { name: "ต่อดอก", data: data[0][0] },
+            { name: "ส่งดอก", data: data[0][1] },
             {
                 name: "เพิ่มเงินต้น",
-                data: data[2],
+                data: data[0][2],
             },
             {
                 name: "ลดเงินต้น",
-                data: data[3],
+                data: data[0][3],
             },
         ],
         colors: columnColors,
@@ -60,6 +61,59 @@ var columnColors = getChartColorsArray("#column_chart"),
 (chart = new ApexCharts(
     document.querySelector("#column_chart"),
     options
+)).render();
+
+var columnColors2 = getChartColorsArray("#column_chart2"),
+    options2 = {
+        chart: { height: 350, type: "bar", toolbar: { show: !1 } },
+        plotOptions: { bar: { horizontal: !1, columnWidth: "45%" } },
+        dataLabels: { enabled: !1 },
+        stroke: { show: !0, width: 2, colors: ["transparent"] },
+        series: [
+            { name: "ต่อดอก", data: data[1][0] },
+            { name: "ส่งดอก", data: data[1][1] },
+            {
+                name: "เพิ่มเงินต้น",
+                data: data[1][2],
+            },
+            {
+                name: "ลดเงินต้น",
+                data: data[1][3],
+            },
+        ],
+        colors: columnColors,
+        xaxis: {
+            categories: [
+                "ม.ค.",
+                "ก.พ.",
+                "มี.ค.",
+                "เม.ย.",
+                "พ.ค.",
+                "มิ.ย.",
+                "ก.ค.",
+                "ส.ค.",
+                "ก.ย.",
+                "ต.ค.",
+                "พ.ย.",
+                "ธ.ค.",
+            ],
+        },
+        yaxis: {
+            title: { text: "(บาท)", style: { fontWeight: "500" } },
+        },
+        grid: { borderColor: "#f1f1f1" },
+        fill: { opacity: 1 },
+        tooltip: {
+            y: {
+                formatter: function (e) {
+                    return + e + " รายการ";
+                },
+            },
+        },
+    };
+(chart2 = new ApexCharts(
+    document.querySelector("#column_chart2"),
+    options2
 )).render();
 
 

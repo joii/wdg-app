@@ -20,48 +20,73 @@ class ReportsController extends Controller
         DB::raw('MONTH(created_at) as month'),
         'transaction_type',
         DB::raw('SUM(interest) as total_interest'),
-        DB::raw('SUM(amount) as total_amount')
+        DB::raw('SUM(amount) as total_amount'),
+        DB::raw('count(*) as total_item_count'),
         )
         ->whereYear('created_at', $currentYear)
         ->groupBy(DB::raw('MONTH(created_at)'), 'transaction_type')
         ->orderBy(DB::raw('MONTH(created_at)'))
         ->get();
 
+
         $data = array();
+        $data1 = array();
+        $data2 = array();
         $intr_arr = array();
         $acc_arr = array();
         $inc_arr = array();
         $dec_arr = array();
+        $intr_count = array();
+        $acc_count = array();
+        $inc_count = array();
+        $dec_count = array();
 
         for($i=0; $i<12; $i++){
                 $intr_arr[$i] =0;
                 $acc_arr[$i] =0;
-                $inc_arr[$i] =0;
+                $inc_arr[$i]=0;
                 $dec_arr[$i] =0;
+
+                $intr_count[$i] =0;
+                $acc_count[$i] =0;
+                $inc_count[$i]=0;
+                $dec_count[$i] =0;
 
             foreach($report as $r){
 
                 if($r->month == $i+1 && $r->transaction_type == 'intr'){
                     $intr_arr[$i] = $r->total_interest;
+                    $intr_count[$i] = $r->total_item_count;
                 }
                 if($r->month == $i+1 && $r->transaction_type == 'acc'){
                     $acc_arr[$i] = $r->total_interest;
+                    $acc_count[$i] = $r->total_item_count;
                 }
 
                 if($r->month == $i+1 && $r->transaction_type == 'inc'){
                     $inc_arr[$i] = $r->total_amount;
+                    $inc_count[$i] = $r->total_item_count;
                 }
 
                 if($r->month == $i+1 && $r->transaction_type == 'dec'){
                     $dec_arr[$i] = $r->total_amount;
+                    $dec_count[$i] = $r->total_item_count;
                 }
+
+
             }
 
-            $data = array($intr_arr,$acc_arr,$inc_arr,$dec_arr);
+
+            $data1 = array($intr_arr,$acc_arr,$inc_arr,$dec_arr);
+            $data2 = array($intr_count,$acc_count,$inc_count,$dec_count);
+
+
         }
 
+         $data = array($data1,$data2);
 
-       // dd($data);
+
+
 
 
         return view ('backend.reports.overview_report',compact('data'));
