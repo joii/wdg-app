@@ -32,6 +32,7 @@ class BranchController extends Controller
                 'name' => $request->name,
                 'location' => $request->location,
                 'phone' => $request->phone,
+                'sms_phone' => $request->sms_phone,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
                 'status' => $request->status,
@@ -56,6 +57,7 @@ class BranchController extends Controller
             $data->name = $request->name;
             $data->location = $request->location;
             $data->phone = $request->phone;
+            $data->sms_phone = $request->sms_phone;
             $data->latitude = $request->latitude;
             $data->longitude = $request->longitude;
             $data->status = $request->status;

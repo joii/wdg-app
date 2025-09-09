@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div>
                                         <div class="form-group mb-3">
                                             <label for="phone" class="form-label">เบอร์ติดต่อ</label>
@@ -61,7 +61,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
+                                    <div>
+                                        <div class="form-group mb-3">
+                                            <label for="sms_phone" class="form-label">เบอร์สำหรับรับ SMS</label>
+                                            <input class="form-control" type="text" name="sms_phone"  id="sms_phone" value="{{ $data->sms_phone }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <div>
                                         <div class="form-group mb-3">
                                             <label for="latitude" class="form-label">ละติจูด</label>
@@ -69,7 +79,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <div>
                                         <div class="form-group mb-3">
                                             <label for="longitude" class="form-label">ลองจิจูด</label>
