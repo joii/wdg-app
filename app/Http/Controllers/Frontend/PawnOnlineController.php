@@ -10,6 +10,7 @@ use App\Models\PawnSendInterestData;
 use App\Models\PawnOnlineTransaction;
 use App\Models\PawnTransaction;
 use App\Models\PawnInterestData;
+use App\Models\Branch;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Carbon\Carbon;
@@ -124,8 +125,9 @@ class PawnOnlineController extends Controller
 
 
         // Send SMS to customer/Admin
-        //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
-        $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
+        $branch_arr = Branch::where('id',$request->branch_id)->first();
+        $sms_phone = $branch_arr->sms_phone;
+        $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
 
         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
 
@@ -221,6 +223,16 @@ class PawnOnlineController extends Controller
          $pawn_send_interest_id = $request->pawn_send_interest_id;
          $add_amount = $request->add_amount;
 
+         $branch_code = substr($pawn_barcode,0,2);
+         switch ($branch_code) {
+            case 'AH': $branch_id = 1; break;
+            case 'AB': $branch_id = 2; break;
+            case 'AC': $branch_id = 3; break;
+            case 'AD': $branch_id = 4; break;
+            default: $branch_id = 1; break;
+         }
+
+
          if ($request->file('fileInput')) {
             $image = $request->file('fileInput');
             $manager = new ImageManager(new Driver());
@@ -237,7 +249,7 @@ class PawnOnlineController extends Controller
                 'transaction_type' => 'acc',//$request->transaction_type,
                 'pawn_id' => $request->pawn_id,
                 'pawn_barcode' => $request->pawn_barcode,
-                'branch_id' => $request->branch_id,
+                'branch_id' => $branch_id,
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
@@ -292,7 +304,7 @@ class PawnOnlineController extends Controller
         'transaction_type' => 'dec',
         'pawn_id' => $pawn_add_data->pawn_id,
         'pawn_barcode' => $pawn_add_data->pawn_barcode,
-        'branch_id' => 1,
+        'branch_id' => $branch_id,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
         'interest' => $request->interest,
@@ -323,18 +335,10 @@ class PawnOnlineController extends Controller
             ]);
 
 
-
-    //    $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-    //    $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-    //    $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-    //    $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
-
-    //     return redirect()->route('customer.pawn_add',$pawn_barcode)->with('pawn_data','pawn_add_data','pawn_send_data','count_send_data','add_amount');
-
-
        // Send SMS to customer/Admin
-        //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
-        $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_add_data->pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
+        $branch_arr = Branch::where('id',$branch_id)->first();
+        $sms_phone = $branch_arr->sms_phone;
+        $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_add_data->pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
 
         $member_id = Auth::guard('member')->id();
         $transaction_type ='';
@@ -388,6 +392,15 @@ class PawnOnlineController extends Controller
          $pawn_send_interest_id = $request->pawn_send_interest_id;
          $add_amount = $request->add_amount;
 
+         $branch_code = substr($pawn_barcode,0,2);
+         switch ($branch_code) {
+            case 'AH': $branch_id = 1; break;
+            case 'AB': $branch_id = 2; break;
+            case 'AC': $branch_id = 3; break;
+            case 'AD': $branch_id = 4; break;
+            default: $branch_id = 1; break;
+         }
+
 
 
          // Accrued Interest Transaction
@@ -400,7 +413,7 @@ class PawnOnlineController extends Controller
                 'transaction_type' => 'acc',//$request->transaction_type,
                 'pawn_id' => $request->pawn_id,
                 'pawn_barcode' => $request->pawn_barcode,
-                'branch_id' => $request->branch_id,
+                'branch_id' => $branch_id, //$request->branch_id,
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
@@ -452,7 +465,7 @@ class PawnOnlineController extends Controller
         'transaction_type' => 'inc',
         'pawn_id' => $pawn_add_data->pawn_id,
         'pawn_barcode' => $pawn_add_data->pawn_barcode,
-        'branch_id' => 1,
+        'branch_id' => $branch_id,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
         'interest' => $request->interest,
@@ -485,8 +498,9 @@ class PawnOnlineController extends Controller
             ]);
 
             // Send SMS to customer/Admin
-            //$this->ThaiBulkSmsService->sendSMS($request->customer_phone,'ท่านมีการชำระดอกใหม่ กรุณาตรวจสอบ');
-            $this->ThaiBulkSmsService->sendSMS('0814264966',$pawn_add_data->pawn_barcode.' มีการทำรายการเพิ่มเงินต้นกรุณาตรวจสอบ');
+             $branch_arr = Branch::where('id',$branch_id)->first();
+             $sms_phone = $branch_arr->sms_phone;
+            $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_add_data->pawn_barcode.' มีการทำรายการเพิ่มเงินต้นกรุณาตรวจสอบ');
 
 
             $member_id = Auth::guard('member')->id();
@@ -556,6 +570,18 @@ class PawnOnlineController extends Controller
          $pawn_send_interest_id = $request->pawn_send_interest_id;
          $add_amount = $request->add_amount;
 
+         $branch_code = substr($pawn_barcode,0,2);
+         switch ($branch_code) {
+            case 'AH': $branch_id = 1; break;
+            case 'AB': $branch_id = 2; break;
+            case 'AC': $branch_id = 3; break;
+            case 'AD': $branch_id = 4; break;
+            default: $branch_id = 1; break;
+         }
+
+
+
+
          if ($request->file('fileInput')) {
             $image = $request->file('fileInput');
             $manager = new ImageManager(new Driver());
@@ -572,7 +598,7 @@ class PawnOnlineController extends Controller
                 'transaction_type' => 'acc',//$request->transaction_type,
                 'pawn_id' => $request->pawn_id,
                 'pawn_barcode' => $request->pawn_barcode,
-                'branch_id' => $request->branch_id,
+                'branch_id' => $branch_id,
                 'member_id' => Auth::guard('member')->id(),
                 'customer_id' => $request->customer_id,
                 'interest' => $request->interest,
@@ -628,7 +654,7 @@ class PawnOnlineController extends Controller
         'transaction_type' => 'dec',
         'pawn_id' => $pawn_add_data->pawn_id,
         'pawn_barcode' => $pawn_add_data->pawn_barcode,
-        'branch_id' => 1,
+        'branch_id' => $branch_id,
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
         'interest' => $request->interest,
@@ -661,6 +687,14 @@ class PawnOnlineController extends Controller
                 'payment_status' =>'pending',
                 'created_at' => Carbon::now(),
             ]);
+
+
+
+         // Send SMS to customer/Admin
+        $branch_arr = Branch::where('id',$branch_id)->first();
+        $sms_phone = $branch_arr->sms_phone;
+        $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_add_data->pawn_barcode.' มีการทำรายการลดเงินต้นกรุณาตรวจสอบ');
+
 
 
         $member_id = Auth::guard('member')->id();
