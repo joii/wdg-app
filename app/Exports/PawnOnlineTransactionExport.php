@@ -14,7 +14,15 @@ class PawnOnlineTransactionExport implements FromCollection, WithHeadings
     public function collection()
     {
         // ดึงข้อมูลจาก model และแมพเฉพาะ field ที่ต้องการ
-        return PawnOnlineTransaction::select('transaction_date', 'transaction_time', 'token_id', 'transaction_type','pawn_barcode','number_of_month','interest','amount','payment_amount','payment_method','customer_name','customer_address','customer_phone','id_card','remarks','approved_by','is_erased')->get()->map(function ($pawn) {
+        return PawnOnlineTransaction::select('transaction_date', 'transaction_time', 'token_id', 'transaction_type','pawn_barcode','number_of_month','interest','amount','payment_amount','payment_method','customer_name','customer_address','customer_phone','id_card','remarks','approved_by','is_erased')
+         ->whereBetween('created_at', [
+                now()->startOfDay(),       // 00:00:00
+                now()->setTime(11, 59, 59) // 11:59:59
+            ])
+        ->where('payment_status', 'paid')
+        ->where('is_erased', FALSE)
+        ->get()
+        ->map(function ($pawn) {
             return [
                 'D_Date' => $pawn->transaction_date,
                 'D_Time' => $pawn->transaction_time,
