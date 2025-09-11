@@ -225,11 +225,14 @@ class PawnOnlineController extends Controller
 
          $branch_code = substr($pawn_barcode,0,2);
          switch ($branch_code) {
-            case 'AH': $branch_id = 1; break;
-            case 'AB': $branch_id = 2; break;
-            case 'AC': $branch_id = 3; break;
-            case 'AD': $branch_id = 4; break;
-            default: $branch_id = 1; break;
+            case 'AC': $branch_id = 1; break;
+            case 'BH': $branch_id = 1; break;
+            case 'AD': $branch_id = 2; break;
+            case 'BI': $branch_id = 2; break;
+            case 'BJ': $branch_id = 3; break;
+            case 'AH': $branch_id = 4; break;
+            case 'BK': $branch_id = 4; break;
+            default: $branch_id = 3; break; //C
          }
 
 
@@ -394,11 +397,14 @@ class PawnOnlineController extends Controller
 
          $branch_code = substr($pawn_barcode,0,2);
          switch ($branch_code) {
-            case 'AH': $branch_id = 1; break;
-            case 'AB': $branch_id = 2; break;
-            case 'AC': $branch_id = 3; break;
-            case 'AD': $branch_id = 4; break;
-            default: $branch_id = 1; break;
+            case 'AC': $branch_id = 1; break;
+            case 'BH': $branch_id = 1; break;
+            case 'AD': $branch_id = 2; break;
+            case 'BI': $branch_id = 2; break;
+            case 'BJ': $branch_id = 3; break;
+            case 'AH': $branch_id = 4; break;
+            case 'BK': $branch_id = 4; break;
+            default: $branch_id = 3; break; //C
          }
 
 
@@ -572,11 +578,14 @@ class PawnOnlineController extends Controller
 
          $branch_code = substr($pawn_barcode,0,2);
          switch ($branch_code) {
-            case 'AH': $branch_id = 1; break;
-            case 'AB': $branch_id = 2; break;
-            case 'AC': $branch_id = 3; break;
-            case 'AD': $branch_id = 4; break;
-            default: $branch_id = 1; break;
+            case 'AC': $branch_id = 1; break;
+            case 'BH': $branch_id = 1; break;
+            case 'AD': $branch_id = 2; break;
+            case 'BI': $branch_id = 2; break;
+            case 'BJ': $branch_id = 3; break;
+            case 'AH': $branch_id = 4; break;
+            case 'BK': $branch_id = 4; break;
+            default: $branch_id = 3; break; //C
          }
 
 
