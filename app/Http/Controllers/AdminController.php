@@ -105,7 +105,7 @@ class AdminController extends Controller
 
         // For Table Data
         // keyword : today , yesterday,week,month
-        $startDate = Carbon::now()->subDays(1);
+        $startDate = Carbon::now()->subDays(7);
         $endDate = Carbon::now(); // วันที่ปัจจุบัน
         switch($keyword){
             case 'today':
@@ -132,6 +132,8 @@ class AdminController extends Controller
                 $startDate = Carbon::now()->subDays(90);
                 $endDate = Carbon::now();
         }
+
+
         $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
             ->orderBy('pawn_date','desc')
             ->get();
