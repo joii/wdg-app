@@ -27,7 +27,9 @@ class PawnSub100NMDataController extends Controller
     public function findLatestImportFile()
     {
         $folder = storage_path('app/public/import');
-        $files = glob($folder . '/Prawn_Sub100NM_*.csv');
+        //$files = glob($folder . '/Prawn_Sub100NM_*.csv');
+        $allFiles = glob($folder . '/Prawn_Sub100NM_*.*');
+        $files = preg_grep('/\.csv$/i', $allFiles); // i = case-insensitive
 
         if (empty($files)) {
             return null;

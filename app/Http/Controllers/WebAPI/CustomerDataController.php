@@ -27,7 +27,12 @@ class CustomerDataController extends Controller
     public function findLatestImportFile()
     {
         $folder = storage_path('app/public/import');
-        $files = glob($folder . '/Customer_*.csv');
+        //$files = glob($folder . '/Customer_*.csv');
+
+        $allFiles = glob($folder . '/Customer_*.*');
+        $files = preg_grep('/\.csv$/i', $allFiles); // i = case-insensitive
+
+
 
         if (empty($files)) {
             return null;
@@ -44,6 +49,9 @@ class CustomerDataController extends Controller
             //$csvFile = storage_path('app/public/Customer_20250610_135102.csv');
 
             $file = $this->findLatestImportFile();
+
+
+
             $csvFile = storage_path('app/public/import/'.$file);
 
 

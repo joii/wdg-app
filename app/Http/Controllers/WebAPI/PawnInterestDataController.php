@@ -26,7 +26,9 @@ class PawnInterestDataController extends Controller
     public function findLatestImportFile()
     {
         $folder = storage_path('app/public/import');
-        $files = glob($folder . '/PrawnInterest_*.csv');
+        //$files = glob($folder . '/PrawnInterest_*.csv');
+        $allFiles = glob($folder . '/PrawnInterest_*.*');
+        $files = preg_grep('/\.csv$/i', $allFiles); // i = case-insensitive
 
         if (empty($files)) {
             return null;
