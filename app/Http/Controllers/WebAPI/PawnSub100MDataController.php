@@ -231,10 +231,8 @@ public function syncPawnData()
                 $pawn_sub100m_id = $pawn_sub100m->pawn_sub100m_id;
                 $stock_category_id = $pawn_sub100m->stock_category_id;
                 $quantity = $pawn_sub100m->quantity;
-            }
 
-
-            PawnSub100mData::create([
+                 PawnSub100mData::create([
                 'pawn_sub100m_id' => $pawn_sub100m_id,
                 'pawn_barcode'   => $pawn->pawn_barcode,
                 'stock_category_id' => $stock_category_id,
@@ -244,6 +242,10 @@ public function syncPawnData()
                 // เพิ่ม fields ที่จำเป็นตามตาราง
                 'is_erased'      => 0,
             ]);
+            }
+
+
+
 
             } // close  if ($pawn->pawn_online_status === 'Update')
 

@@ -214,10 +214,8 @@ class PawnSub100NMDataController extends Controller
                     $pawn_sub100nm_id = $pawn_sub100nm->pawn_sub100m_id;
                     $stock_category_id = $pawn_sub100nm->stock_category_id;
                     $quantity = $pawn_sub100nm->quantity;
-                }
 
-
-                PawnSub100nmData::create([
+                      PawnSub100nmData::create([
                     'pawn_sub100nm_id' => $pawn_sub100nm_id,
                     'pawn_barcode'   => $pawn->pawn_barcode,
                     'stock_category_id' => $stock_category_id,
@@ -226,6 +224,10 @@ class PawnSub100NMDataController extends Controller
                     // เพิ่ม fields ที่จำเป็นตามตาราง
                     'is_erased'      => 0,
                 ]);
+                }
+
+
+
 
                 } // close  if ($pawn->pawn_online_status === 'Update')
 
