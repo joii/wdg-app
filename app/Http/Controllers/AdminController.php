@@ -71,14 +71,6 @@ class AdminController extends Controller
         $endDate = Carbon::now(); // วันที่ปัจจุบัน
         $startDate = Carbon::now()->subDays($range); // ย้อนหลัง 30 วัน
 
-        // $overdue = DB::table('pawn_interest_data')
-        //     // ->whereYear('pawn_expire_date', 2025)
-        //     ->select('*')
-        //     ->whereBetween('pawn_expire_date', [$startDate,$endDate])
-        //     ->distinct()
-        //     ->get()
-        //     ->groupBy('pawn_expire_date');
-
         $overdue = DB::table('pawn_interest_data')
               ->select('pawn_barcode','pawn_expire_date')
               ->whereBetween('pawn_expire_date', [$startDate,$endDate])
@@ -113,6 +105,7 @@ class AdminController extends Controller
 
         // For Table Data
         // keyword : today , yesterday,week,month
+        $startDate = Carbon::now()->subDays(1);
         $endDate = Carbon::now(); // วันที่ปัจจุบัน
         switch($keyword){
             case 'today':
