@@ -133,9 +133,6 @@ class AdminController extends Controller
                 $endDate = Carbon::now();
         }
 
-
-         $startDate = Carbon::now()->subDays(7);
-         $endDate = Carbon::now();
          $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
             ->orderBy('pawn_date','desc')
             ->get();
