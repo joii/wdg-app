@@ -14,7 +14,12 @@ class PawnTransactionController extends Controller
 {
     public function Index(){
 
-        $pawn_data = PawnData::all();
+       // $pawn_data = PawnData::all();
+         $startDate = Carbon::now()->subDays(90);
+         $endDate = Carbon::now();
+         $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
+            ->orderBy('pawn_date','desc')
+            ->get();
         return view('backend.pawn_transaction.index',compact('pawn_data'));
     }
 
@@ -47,7 +52,16 @@ class PawnTransactionController extends Controller
 
     public function Latest(){
         // Get today's date and find pawn data that was added today
-        $pawn_data = PawnData::where('pawn_date_cal_interest',Carbon::today())->get();
+       // $pawn_data = PawnData::where('pawn_date_cal_interest',Carbon::today())->get();
+        //  $startDate = Carbon::now()->subDays(7);
+        //  $endDate = Carbon::now();
+        //  $pawn_data = PawnData::whereBetween('pawn_date', [$startDate,$endDate])
+        //     ->orderBy('id','desc')
+        //     ->get();
+
+        $pawn_data = PawnData::orderBy('created_at', 'desc')
+            ->take(100)
+            ->get();
         return view('backend.pawn_transaction.latest',compact('pawn_data'));
     }
 
