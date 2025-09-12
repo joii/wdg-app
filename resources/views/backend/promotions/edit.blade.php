@@ -51,7 +51,8 @@
                                     <div>
                                         <div class="form-group mb-3">
                                             <label for="detail" class="form-label">รายละเอียดโปรโมชัน <span class="text-danger ">*</span></label>
-                                            <textarea class="form-control" id="detail"  name="detail" rows="3">{{ $data->detail }}</textarea>
+                                            {{-- <textarea class="form-control" id="detail"  name="detail" rows="3">{{ $data->detail }}</textarea> --}}
+                                            <textarea class="form-control" id="summernote"  name="detail">{{ $data->detail }}</textarea>
                                         </div>
                                     </div>
                                 </div>

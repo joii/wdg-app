@@ -115,7 +115,7 @@
         <script src="{{ asset('backend/assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
         <script src="{{ asset('backend/assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
         <script src="{{ asset('backend/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-
+        <script src="{{ asset('backend/assets/modules/tooltip.js')}}"></script>
         <!-- Responsive examples -->
         <script src="{{ asset('backend/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
         <script src="{{ asset('backend/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js')}}"></script>
@@ -195,7 +195,19 @@
       <!-- dashboard init -->
         <script src="{{ asset('backend/assets/js/app.js')}}"></script>
         <script src="{{ asset('backend/assets/js/validate.min.js')}}"></script>
-
+        @if (request()->routeIs('backend.promotion.*'))
+        <!-- include summernote css/js -->
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+        <script>
+            $(document).ready(function() {
+            $('#summernote').summernote({
+                placeholder: 'Content Here',
+                height: 200
+            });
+            });
+        </script>
+         @endif
 
         <script>
             @if(Session::has('message'))
