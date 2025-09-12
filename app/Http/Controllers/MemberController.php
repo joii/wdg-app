@@ -82,7 +82,7 @@ class MemberController extends Controller
 
         DB::table('members')
         ->where('id', $id)
-        ->update(['confirm_customer' => 1,'registered_phone'=>$key]);
+        ->update(['confirm_customer' => 1,'registered_phone'=>$phone]); //$key
 
 
         // $updatePawnData = PawnData::where('customer_phone', $key)->update([
