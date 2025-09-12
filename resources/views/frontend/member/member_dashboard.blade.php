@@ -20,6 +20,7 @@
                 </div>
             </div>
             <div class="row card-contract-list">
+
             @foreach ($data as $item )
                 <div class="col-lg-4 col-sm-6">
                     <a href="{{ route('customer.consignment_detail', $item->pawn_barcode) }}">
@@ -78,18 +79,18 @@
             </div><!--row-->
 
 
-            {{-- <ul class="pagination">
-                <li><a class="active" href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-            </ul> --}}
 
             @if($confirm_data==0)
+               @php
+                     $id = Auth::guard('member')->id();
+                @endphp
             <div class="row justify-content-md-center pt-5">
                 <div class="col-md-3 col-sm-6 ">
+
                      <form  method="post" action="{{ route('member.customer_confirmation') }}" >
                         @csrf
                         <input type="hidden" name="key" value="{{$key }}">
+                         <input type="hidden" name="id" value="{{$id }}">
                         <button class="btn btn-green-dark w-100 " type="submit" id="customer_confirm">
                             ยืนยันธุรกรรมของคุณ
                         </button>
@@ -124,7 +125,7 @@
                     </div>
 
                     <div class="col-12">
-
+                        <input type="hidden" name="id" value="{{$id }}">
                         <button class="btn btn-green-dark w-100" type="submit">
                             ตรวจสอบ
                         </button>

@@ -35,6 +35,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\WebAPI\PawnInterestController;
 use App\Http\Controllers\WebAPI\GoldPriceAPIController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Frontend\MemberBankAccountController;
 use Illuminate\Support\Facades\Artisan;
 // Route::get('/', function () {
 //     return view('frontend.home');
@@ -51,6 +52,18 @@ Route::middleware('member')->group(function () {
     Route::post('/member/check_pawn_transaction', [MemberController::class, 'checkPawnTransaction'])->name('member.check_pawn_transaction');
     Route::post('/member/confirm-customer', [MemberController::class, 'customerConfirmation'])->name('member.customer_confirmation');
     Route::get('/member/profile', [MemberController::class, 'memberProfile'])->name('member.member_profile');
+    Route::post('/member/profile/update', [MemberController::class, 'UpdateMemberProfile'])->name('member.member_profile.update');
+
+});
+
+
+// Frontend : Member Bank Account Route
+Route::middleware('member')->group(function () {
+    Route::get('/member/bank_account/create', [MemberBankAccountController::class, 'CreateBankAccount'])->name('member.bank_account.create');
+    Route::post('/member/bank_account/store', [MemberBankAccountController::class, 'StoreBankAccount'])->name('member.bank_account.store');
+    Route::get('/member/bank_account/edit/{id}', [MemberBankAccountController::class, 'EditBankAccount'])->name('member.bank_account.edit');
+    Route::post('/member/bank_account/update', [MemberBankAccountController::class, 'UpdateBankAccount'])->name('member.bank_account.update');
+    Route::post('/member/bank_account/destroy', [MemberBankAccountController::class, 'DestroyBankAccount'])->name('member.bank_account.destroy');
 });
 
 // Frontend : Contract Route

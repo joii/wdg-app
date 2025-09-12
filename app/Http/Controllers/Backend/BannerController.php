@@ -96,9 +96,9 @@ class BannerController extends Controller
         {
             $banner = Banner::findOrFail($id);
 
-            if(file_exists($banner->old_image))
+            if(file_exists($banner->image_path))
             {
-                unlink($banner->old_image);
+                unlink($banner->image_path);
             }
 
             $banner->delete();

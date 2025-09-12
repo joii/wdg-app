@@ -4,6 +4,15 @@
     $profileData = App\Models\Member::find($id);
     $pawnData = App\Models\PawnData::where('member_id', $id)->get();
 @endphp
+<style>
+a.profile{
+    cursor: pointer;
+}
+
+a.profile:hover{
+    text-decoration: underline;
+}
+</style>
 <header class="header">
     <div class="container">
         <a class="navbar-brand" href="/">
@@ -33,12 +42,15 @@
                 </a>
             </div> --}}
             <div class="info">
-                <h3>ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</h3>
+                <h3>ยินดีต้อนรับ
+                    <a href="{{ route('member.member_profile') }}" class="profile">{{ $profileData->firstname }} {{ $profileData->lastname }}</a>
+                </h3>
                 {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
                 <p>
                     <a href="{{ route('member.member_dashboard') }}">ธุรกรรมของคุณ</a> |
                     <a href="{{ route('customer.transaction_history') }}">ทำรายการ</a> |
-                    <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
+                    <a href="{{ route('member.logout') }}">ออกจากระบบ</a>
+                </p>
 
             </div>
         </div>
@@ -85,9 +97,15 @@
             </div>
 
             <div class="info">
-                 <h3>ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</h3>
+                 <h3>
+                    <a href="{{ route('member.member_profile') }}" class="profile">ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</a>
+                </h3>
                 {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
-                 <p><a href="{{ route('customer.transaction_history') }}">ธุรกรรมของคุณ</a> | <a href="{{ route('member.logout') }}">ออกจากระบบ</a></p>
+                 <p>
+                    <a href="{{ route('member.member_dashboard') }}">ธุรกรรมของคุณ</a> |
+                    <a href="{{ route('customer.transaction_history') }}">ทำรายการ</a> |
+                    <a href="{{ route('member.logout') }}">ออกจากระบบ</a>
+                </p>
             </div>
         </div>
     </div>
