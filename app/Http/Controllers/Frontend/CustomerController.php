@@ -28,7 +28,7 @@ class CustomerController extends Controller
      public function consignmentDetail(String $pawn_barcode)
     {
         $data = PawnData::where('pawn_barcode', $pawn_barcode)->first();
-        $interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->get();
+        $interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         if (!$data) {
             abort(404);
         }
