@@ -35,7 +35,7 @@ class PawnOnlineController extends Controller
     // ต่อดอก
     public function PawnInterest($pawn_barcode){
        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-       $interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->get();
+       $interest_data =  PawnInterestData::where('pawn_barcode', $pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
        return view('frontend.customer.pawn_interest', compact('pawn_data','interest_data'));
 
     }
