@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="row card-contract-list">
- @php print($data) @endphp
+
             @foreach ($data as $item )
                 <div class="col-lg-4 col-sm-6">
                     <a href="{{ route('customer.consignment_detail', $item->pawn_barcode) }}">
