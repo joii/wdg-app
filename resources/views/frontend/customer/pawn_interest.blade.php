@@ -164,7 +164,7 @@
                             </div><!--card-->
                         </div>
 
-                        <div class="col-12 py-sm-4 mb-sm-5">
+                        <div class="col-12 py-sm-4 mb-sm-5 pt-4">
                             <input type="hidden" name="pawn_id" value="{{ $pawn_data->id }}">
                             <input type="hidden" name="pawn_id" value="{{ $pawn_data->id }}">
                             <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
