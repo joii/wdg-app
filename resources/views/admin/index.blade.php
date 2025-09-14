@@ -94,7 +94,7 @@
                             <div class="col-12">
                                 <span class="text-muted mb-3 lh-1 d-block text-truncate">ลดเงินต้น ({{ number_format($decrease_total_transaction) }} รายการ)</span>
                                 <h4 class="mb-3">
-                                    <span>{{ number_format($decrease_total_transaction) }}</span> บาท
+                                    <span>{{ number_format($decrease_total_amount) }}</span> บาท
                                 </h4>
                             </div>
 
