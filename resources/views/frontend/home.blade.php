@@ -61,6 +61,7 @@
                     <p class="price">{{ number_format($goldPrices[0]->buy_gold_bar) }}</p>
                 </div>
 
+                 @if (!Auth::guard('member')->user())
                 <div class="card" style="min-height: 190px; background-color:#F1E2B6;color:#8f650b;">
                   <div class="card-body">
   สนใจสมัครสมาชิกกับ Wisdom Gold ครบ จบทุกบริการเรื่องทองคำ <a href="{{ route('member.register') }}"><strong>คลิกที่นี่</strong></a> หรือ หากท่านเป็นสมาชิกแล้วคลิกเข้าสู่ระบบด้านล่างได้เลย
@@ -70,6 +71,7 @@
                      </div>
                   </div>
                 </div>
+                @endif
 
             </div>
 
