@@ -80,7 +80,7 @@
 
                                     <div >
                                         <label for="branch_id" class="form-label form-edit">สาขาที่ทำสัญญา:</label>
-                                        <input class="form-control" type="text" name="branch_id"  id="branch_id" value="1" disabled>
+                                        <input class="form-control" type="text" name="branch_id"  id="branch_id" value="{{ $data->branch_id }}" disabled>
                                     </div>
                                     <div class="pt-4">
                                         @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)

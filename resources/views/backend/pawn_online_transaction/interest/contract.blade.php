@@ -72,7 +72,7 @@
                                     </div>
                                     <div>
                                         <h5 class="font-size-15">สาขาที่ทำสัญญา:</h5>
-                                        <p>สาขา 1</p>
+                                        <p>สาขา {{ $data->branch_id }}</p>
 
                                     </div>
                                 </div>
