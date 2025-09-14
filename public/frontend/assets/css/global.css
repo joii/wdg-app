@@ -1681,7 +1681,7 @@ transition-delay:600ms;
   transition: all 0.25s;
   cursor: pointer;
   position: relative;
-  font-size:var(--fs-16);
+  font-size:var(--fs-18);
 }
 .accordion-header .icons{
   margin-left: auto;
