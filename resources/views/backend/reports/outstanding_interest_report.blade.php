@@ -26,23 +26,32 @@
 
 
         <div class="row">
-
-            <div class="col-xl-12">
+            <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">สรุปภาพรวมรายการดอกเบี้ยค้างชำระปี {{ now()->year+543 }}</h4>
+                        <h4 class="card-title mb-0">สรุปยอดเงินรายการดอกเบี้ยค้างชำระปี {{ now()->year+543 }}</h4>
                     </div>
                     <div class="card-body">
                         <div id="column_chart" data-colors='["#A81818"]' class="apex-charts" dir="ltr"></div>
                     </div>
                 </div><!--end card-->
-                <script>
-                    /* Pass data to JavaScript to generate bar graph*/
-                   window.appData = @json($data);
-                </script>
+            </div>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">จำนวนการทำธุรกรรมรายการดอกเบี้ยค้างชำระปี {{ now()->year+543 }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="column_chart2" data-colors='["#A81818"]' class="apex-charts" dir="ltr"></div>
+                    </div>
+                </div><!--end card-->
             </div>
         </div>
         <!-- end row -->
+         <script>
+            /* Pass data to JavaScript to generate bar graph*/
+            window.appData = @json($data);
+        </script>
 
         <div class="row">
 

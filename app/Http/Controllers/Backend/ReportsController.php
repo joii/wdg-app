@@ -107,25 +107,30 @@ class ReportsController extends Controller
         $report = PawnData::select(
         DB::raw('MONTH(pawn_date) as month'),
         DB::raw('SUM(total_pawn_amount_first) as total_pawn_amount'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('pawn_date', $currentYear)
         ->groupBy(DB::raw('MONTH(pawn_date)'))
         ->orderBy(DB::raw('MONTH(pawn_date)'))
         ->get();
 
-         $data = array();
+        $data = array();
+        $data1 = array();
+        $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_pawn_amount;
+                    $data1[$i] = $r->total_pawn_amount;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
 
 
-
+        $data = array($data1,$data2);
         return view ('backend.reports.pawn_report',compact('data','pawn_data','startOfLastWeek','endOfLastWeek'));
     }
 
@@ -183,6 +188,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','intr')
@@ -191,16 +197,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
 
+        $data = array($data1,$data2);
         return view ('backend.reports.send_interest_report',compact('data','transactions','startOfLastWeek','endOfLastWeek' ));
     }
 
@@ -221,6 +232,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','intr')
@@ -229,15 +241,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
+
+        $data = array($data1,$data2);
 
         return view ('backend.reports.send_interest_report',compact('data','transactions','startOfLastWeek','endOfLastWeek' ));
     }
@@ -257,6 +275,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','inc')
@@ -265,17 +284,22 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
 
 
+        $data = array($data1,$data2);
         return view ('backend.reports.increase_principle_report',compact('data','transactions','startOfLastWeek','endOfLastWeek'));
     }
 
@@ -294,6 +318,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','inc')
@@ -301,18 +326,23 @@ class ReportsController extends Controller
         ->orderBy(DB::raw('MONTH(transaction_date)'))
         ->get();
 
-         $data = array();
+          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
 
 
+        $data = array($data1,$data2);
         return view ('backend.reports.increase_principle_report',compact('data','transactions','startOfLastWeek','endOfLastWeek'));
     }
 
@@ -332,6 +362,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','dec')
@@ -340,15 +371,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
+
+        $data = array($data1,$data2);
         return view ('backend.reports.decrease_principle_report',compact('data','transactions','startOfLastWeek','endOfLastWeek'));
     }
 
@@ -369,6 +406,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','dec')
@@ -377,15 +415,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
+
+        $data = array($data1,$data2);
         return view ('backend.reports.decrease_principle_report',compact('data','transactions','startOfLastWeek','endOfLastWeek'));
     }
 
@@ -407,6 +451,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+        DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','acc')
@@ -415,16 +460,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
 
+        $data = array($data1,$data2);
         return view ('backend.reports.outstanding_interest_report',compact('data','transactions','startOfLastWeek','endOfLastWeek' ));
     }
 
@@ -446,6 +496,7 @@ class ReportsController extends Controller
         $report = PawnOnlineTransaction::select(
         DB::raw('MONTH(transaction_date) as month'),
         DB::raw('SUM(interest) as total_interest'),
+         DB::raw('COUNT(*) as total_records')
         )
         ->whereYear('transaction_date', $currentYear)
         ->where('transaction_type','acc')
@@ -454,15 +505,21 @@ class ReportsController extends Controller
         ->get();
 
          $data = array();
+         $data1 = array();
+         $data2 = array();
            for($i=0; $i<12; $i++){
-             $data[$i] =0;
+             $data1[$i] =0;
+             $data2[$i] =0;
 
             foreach($report as $r){
                 if($r->month == $i+1){
-                    $data[$i] = $r->total_interest;
+                    $data1[$i] = $r->total_interest;
+                    $data2[$i] = $r->total_records;
                 }
             }
         }
+
+        $data = array($data1,$data2);
 
         return view ('backend.reports.outstanding_interest_report',compact('data','transactions','startOfLastWeek','endOfLastWeek' ));
     }

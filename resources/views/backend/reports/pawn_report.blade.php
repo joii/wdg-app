@@ -21,22 +21,34 @@
             </div>
             <!-- end page title -->
 
-
-            <div class="col-xl-12">
+         <div class="row">
+            <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">รายการขายฝาก</h4>
+                        <h4 class="card-title mb-0">สรุปยอดเงินรายการขายฝาก</h4>
                     </div>
                     <div class="card-body" >
                         <div id="column_chart" data-colors='["#16604A"]' class="apex-charts" dir="ltr"></div>
                     </div>
                 </div><!--end card-->
-                <script>
-                    /* Pass data to JavaScript to generate bar graph*/
-                   window.appData = @json($data);
-                </script>
+            </div>
+
+             <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">จำนวนการทำธุรกรรมรายการขายฝาก</h4>
+                    </div>
+                    <div class="card-body" >
+                        <div id="column_chart2" data-colors='["#16604A"]' class="apex-charts" dir="ltr"></div>
+                    </div>
+                </div><!--end card-->
+            </div>
 
             </div>
+             <script>
+                /* Pass data to JavaScript to generate bar graph*/
+                window.appData = @json($data);
+            </script>
         </div>
 
         <!-- end row -->
