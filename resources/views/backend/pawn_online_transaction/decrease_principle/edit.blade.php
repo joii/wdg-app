@@ -132,8 +132,19 @@
                                             <input class="form-control" type="text" name="total_pawn_amount_first"  id="total_pawn_amount_first" value="{{ $data->total_pawn_amount_first }}" disabled >
                                         </div>
                                         <div>
-                                            <label for="percent_interest" class="form-label form-edit">จำนวนเงินที่ต้องการเพิ่ม:</label>
-                                            <input class="form-control" type="text" name="percent_interest"  id="percent_interest" value="{{ $transaction_data->payment_amount }}" disabled >
+                                            <label for="percent_interest" class="form-label form-edit">ยอดเงินโอน:</label>
+                                            <input class="form-control" type="text"  value="{{ $transaction_data->payment_amount }}" disabled >
+                                        </div>
+                                         <div>
+                                            <label for="percent_interest" class="form-label form-edit">หักดอกเบี้ยค้างชำระ/ส่งดอก@auth()
+
+                                            @endauth</label>
+                                            <input class="form-control" type="text"  value="{{ $transaction_data->interest }}" disabled >
+                                        </div>
+
+                                        <div>
+                                            <label for="percent_interest" class="form-label form-edit">จำนวนเงินลดต้น/ส่งเงินต้นคงเหลือ:</label>
+                                            <input class="form-control" type="text"  value="{{ $transaction_data->amount}}" disabled >
                                         </div>
 
 

@@ -137,8 +137,11 @@ class PawnOnlineTransactionController extends Controller
      public function AccruedInterestTransactionContract(String $pawn_barcode){
 
          $transaction_data = PawnOnlineTransaction::where('pawn_barcode', $pawn_barcode)->where('transaction_type','acc')->first();
+         $transaction_id = $transaction_data->id;
+         $transaction_parties_data = PawnOnlineTransaction::where('transaction_parties', $transaction_id)->first();
+
          $data = PawnData::where('pawn_barcode', $pawn_barcode)->first();
-        return view('backend.pawn_online_transaction.accrued_interest.contract',compact('data','transaction_data'));
+        return view('backend.pawn_online_transaction.accrued_interest.contract',compact('data','transaction_data','transaction_parties_data'));
      }
 
      public function AccruedInterestTransactionPrint(String $pawn_barcode){

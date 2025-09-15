@@ -69,10 +69,11 @@
                                             {{ \Carbon\Carbon::parse($data->transaction_date)->thaidate('l j F Y') }}
                                         </p>
                                     </div>
-                                    <div>
-                                        <h5 class="font-size-15">วันที่ต่อสัญญา:</h5>
+                                   <div>
+                                        <h5 class="font-size-15">ระยะเวลากำหนด:</h5>
                                         <p>
-                                            {{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->thaidate('l j F Y') }}
+                                            {{-- {{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->thaidate('l j F Y') }} --}}
+                                            {{ $data->period }} เดือน
                                         </p>
                                     </div>
                                 </div>
@@ -112,8 +113,12 @@
                                             <p>
                                                 <strong>ชื่อสินค้า:</strong> {{ $data->remarks }}<br/>
                                                 <strong>น้ำหนัก:</strong> {{ $data->total_weight }}<br/>
-                                                <strong>เงินต้น:</strong> {{ number_format($transaction_data->amount) }} บาท<br/>
-                                                <strong>ยอดที่ต้องการเพิ่ม:</strong>{{ number_format($transaction_data->payment_amount) }} บาท<br/>
+                                                <strong>วงเงินเดิม:</strong>{{ number_format($data->total_pawn_amount) }} บาท<br/>
+                                                <strong>อัตราดอกเบี้ย:</strong>ร้อยละ {{ number_format($data->percent_interest) }}<br/>
+                                                <hr/>
+                                                <strong>ยอดที่รับชำระ:</strong>{{ number_format($transaction_data->payment_amount) }} บาท<br/>
+                                                <strong>หักดอกเบี้ยค้างชำระ:</strong> {{ number_format($transaction_data->interest) }} บาท<br/>
+                                                <strong>ยอดลดเงินต้น/ส่งเงินต้น:</strong> {{ number_format($transaction_data->amount) }} บาท<br/>
                                                 {{-- <strong>กำหนดส่งดอก/ไถ่ถอน:</strong> {{ \Carbon\Carbon::parse($data->pawn_date)->addDays(60)->thaidate('j F Y') }}<br/> --}}
                                             </p>
                                         </div>
