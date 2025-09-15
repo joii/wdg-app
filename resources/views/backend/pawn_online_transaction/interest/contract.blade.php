@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="flex-shrink-0">
                                         <div class="mb-4">
-                                            <h4 class="float-end font-size-16">สัญญาเลขที่ {{ \Carbon\Carbon::parse($transaction_data->transaction_date)->thaidate('y') }}{{sprintf('%05d', $data->pawn_id) }}</h4>
+                                            <h4 class="float-end font-size-16">สัญญาเลขที่ {{ \Carbon\Carbon::parse($transaction_data->transaction_date)->thaidate('y') }}{{sprintf('%05d', $transaction_data->pawn_id) }}</h4>
                                         </div>
                                     </div>
                                 </div>
