@@ -59,7 +59,7 @@ class PawnTransactionController extends Controller
         //     ->orderBy('id','desc')
         //     ->get();
 
-        $pawn_data = PawnData::orderBy('created_at', 'desc')
+        $pawn_data = PawnData::orderBy('id', 'desc')
             ->take(100)
             ->get();
         return view('backend.pawn_transaction.latest',compact('pawn_data'));
@@ -67,35 +67,40 @@ class PawnTransactionController extends Controller
 
     public function Contract(String $id){
         $data = PawnData::find($id);
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.contract',compact('data','pawn_interest_data'));
     }
 
      public function ContractOverdue(String $pawn_barcode){
         $data = PawnData::where('pawn_barcode',$pawn_barcode)->first();
         //print($data->pawn_id);
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+         $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.contract',compact('data','pawn_interest_data'));
     }
 
     public function Print(String $id){
         $data = PawnData::find($id);
         $pawn_add_data = PawnAddData::where('pawn_id',$data->pawn_id)->get();
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+         $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.print',compact('data','pawn_interest_data'));
     }
 
     public function Detail(String $id){
         $data = PawnData::find($id);
         $pawn_add_data = PawnAddData::where('pawn_id',$data->pawn_id)->get();
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+         $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.detail',compact('data','pawn_interest_data'));
     }
 
     public function Edit(String $id){
         $data = PawnData::find($id);
         $pawn_add_data = PawnAddData::where('pawn_id',$data->pawn_id)->get();
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+         $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.edit',compact('data','pawn_interest_data'));
     }
 
@@ -119,7 +124,8 @@ class PawnTransactionController extends Controller
     public function Interest(String $id){
         //$data = PawnData::find($id);
         $data = PawnData::where('id',$id)->first();
-        $pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+        //$pawn_interest_data = PawnInterestData::where('pawn_id',$data->pawn_id)->get();
+         $pawn_interest_data = PawnInterestData::where('pawn_barcode', $data->pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
         return view('backend.pawn_transaction.pawn_interest',compact('data','pawn_interest_data'));
     }
 }
