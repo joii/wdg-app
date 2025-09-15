@@ -70,8 +70,8 @@
                                     </div>
 
                                     <div >
-                                        <label for="branch_id" class="form-label form-edit">วันที่ต่อสัญญา:</label>
-                                        <input class="form-control" type="text" name="pawn_cal_date_interest"  id="pawn_cal_date_interest" value="{{ \Carbon\Carbon::parse($data->pawn_cal_date_interest)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
+                                        <label for="period" class="form-label form-edit">ระยะเวลากำหนด (เดือน):</label>
+                                        <input class="form-control" type="text" name="period"  id="period" value="{{ $data->period }}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -129,9 +129,13 @@
                                             <label for="total_pawn_amount_first" class="form-label form-edit">จำนวนเงินขายฝากมูลค่า:</label>
                                             <input class="form-control" type="text" name="total_pawn_amount_first"  id="total_pawn_amount_first" value="{{ $data->total_pawn_amount_first }}" disabled >
                                         </div>
+                                         <div>
+                                            <label for="percent_interest" class="form-label form-edit">ระยะเวลาฝาก (เดือน):</label>
+                                            <input class="form-control" type="text" n value="{{ $transaction_data->number_of_month }}" disabled >
+                                        </div>
                                         <div>
                                             <label for="percent_interest" class="form-label form-edit">ดอกเบี้ย:</label>
-                                            <input class="form-control" type="text" name="percent_interest"  id="percent_interest" value="{{ $transaction_data->payment_amount }}" disabled >
+                                            <input class="form-control" type="text"  value="{{ $transaction_data->payment_amount }}" disabled >
                                         </div>
                                         <div>
                                             <label for="percent_interest" class="form-label form-edit">เอกสารการชำระเงิน:</label>
