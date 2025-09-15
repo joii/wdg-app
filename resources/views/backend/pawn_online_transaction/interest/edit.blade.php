@@ -142,6 +142,11 @@
                                             <a href="{{ asset($transaction_data->payment_slip) }}" target="_blank">ดูเอกสาร</a>
                                         </div>
 
+                                         <div>
+                                            <label for="remarks" class="form-label form-edit">หมายเหตุ:</label>
+                                            <input class="form-control" type="text" name="remarks"  id="remarks" value="{{ $transaction_data->remarks }}" >
+                                        </div>
+
                                         <div>
                                             <label for="total_pawn_amount_first" class="form-label form-edit">สถานะ:</label>
                                              <div class="form-check mb-3">

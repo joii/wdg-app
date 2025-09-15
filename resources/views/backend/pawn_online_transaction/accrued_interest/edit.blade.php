@@ -140,6 +140,11 @@
                                         </div>
 
                                         <div>
+                                            <label for="remarks" class="form-label form-edit">หมายเหตุ:</label>
+                                            <input class="form-control" type="text" name="remarks"  id="remarks" value="{{ $transaction_data->remarks }}" >
+                                        </div>
+
+                                        <div>
                                             <label for="total_pawn_amount_first" class="form-label form-edit">สถานะ:</label>
                                             <div class="form-check mb-3">
                                                 <input class="form-check-input" type="radio" name="status" id="status1" {{ $transaction_data->status=='pending'? 'checked':''}}  value="pending">

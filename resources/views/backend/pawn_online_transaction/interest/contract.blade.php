@@ -59,7 +59,7 @@
                                     </div>
                                     <div>
                                         <h5 class="font-size-15">เลขที่บัตร:</h5>
-                                        {{-- <p>{{ $data->pawn_card_no }}</p> --}}
+                                        <p>{{ $data->pawn_card_no }}</p>
 
                                     </div>
                                 </div>

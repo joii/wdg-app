@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PawnAddData;
+use App\Models\Admin;
 use App\Models\PawnData;
 use App\Models\PawnInterestData;
 use App\Models\PawnOnlineTransaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -78,8 +80,15 @@ class PawnOnlineTransactionController extends Controller
     public function InterestTransactionUpdate(Request $request){
         $id = $request->id;
         $data = PawnOnlineTransaction::findOrFail($id);
+
+        $admin_id = Auth::guard('admin')->id();
+        $profileData = Admin::find($admin_id);
+
+
         $data->payment_status = $request->status;
         $data->status = $request->status;
+        $data->approved_by = $profileData->name;
+        $data->remarks = $request->remarks;
         $data->save();
 
         $notification = array(
@@ -170,8 +179,14 @@ class PawnOnlineTransactionController extends Controller
     public function AccruedInterestTransactionUpdate(Request $request){
         $id = $request->id;
         $data = PawnOnlineTransaction::findOrFail($id);
+
+        $admin_id = Auth::guard('admin')->id();
+        $profileData = Admin::find($admin_id);
+
         $data->payment_status = $request->status;
         $data->status = $request->status;
+        $data->approved_by = $profileData->name;
+        $data->remarks = $request->remarks;
         $data->save();
 
         $notification = array(
@@ -260,8 +275,14 @@ class PawnOnlineTransactionController extends Controller
     public function IncreasePrincipleTransactionUpdate(Request $request){
         $id = $request->id;
         $data = PawnOnlineTransaction::findOrFail($id);
+
+        $admin_id = Auth::guard('admin')->id();
+        $profileData = Admin::find($admin_id);
+
         $data->payment_status = $request->status;
         $data->status = $request->status;
+        $data->approved_by = $profileData->name;
+        $data->remarks = $request->remarks;
         $data->save();
 
         $notification = array(
@@ -347,8 +368,13 @@ class PawnOnlineTransactionController extends Controller
     public function DecreasePrincipleTransactionUpdate(Request $request){
         $id = $request->id;
         $data = PawnOnlineTransaction::findOrFail($id);
+        $admin_id = Auth::guard('admin')->id();
+        $profileData = Admin::find($admin_id);
+
         $data->payment_status = $request->status;
         $data->status = $request->status;
+        $data->approved_by = $profileData->name;
+        $data->remarks = $request->remarks;
         $data->save();
 
         $notification = array(
@@ -377,6 +403,8 @@ class PawnOnlineTransactionController extends Controller
         $data->is_erased = TRUE; // Cancel transaction
         $data->erased_date = Carbon::now();
         $data->updated_at = Carbon::now();
+        $data->approved_by = Auth::user()->name;
+        $data->remarks = $request->remark;
         $data->save();
 
         $notification = array(

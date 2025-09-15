@@ -145,6 +145,11 @@
                                             <input class="form-control" type="text"  value="{{ $transaction_data->amount}}" disabled >
                                         </div>
 
+                                         <div>
+                                            <label for="remarks" class="form-label form-edit">หมายเหตุ:</label>
+                                            <input class="form-control" type="text" name="remarks"  id="remarks" value="{{ $transaction_data->remarks }}" >
+                                        </div>
+
 
                                         <div>
                                             <label for="total_pawn_amount_first" class="form-label form-edit">สถานะ:</label>
