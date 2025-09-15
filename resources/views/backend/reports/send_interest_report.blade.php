@@ -135,8 +135,6 @@
         <!-- end content -->
     </div><!-- end container-fluid -->
 </div><!-- end page-content -->
-<script>
-$('#datatable-buttons_filter').label('ค้นหา:');
-</script>
+
 @endsection
 
