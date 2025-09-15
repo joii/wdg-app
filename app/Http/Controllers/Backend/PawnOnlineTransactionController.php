@@ -51,7 +51,8 @@ class PawnOnlineTransactionController extends Controller
       public function InterestTransactionContract(String $pawn_barcode){
 
         $transaction_data = PawnOnlineTransaction::where('pawn_barcode', $pawn_barcode)->where('transaction_type','intr')->first();
-        $data = PawnData::where('pawn_id',$transaction_data->pawn_id)->first();
+        $pawn_barcode = $transaction_data->pawn_barcode;
+        $data = PawnData::where('pawn_barcode', $pawn_barcode)->first();
         return view('backend.pawn_online_transaction.interest.contract',compact('data','transaction_data'));
      }
 
@@ -59,7 +60,8 @@ class PawnOnlineTransactionController extends Controller
 
         $transaction_data = PawnOnlineTransaction::where('pawn_barcode', $pawn_barcode)->first();
         $interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->first();
-        $data = PawnData::where('pawn_id',$transaction_data->pawn_id)->first();
+        $pawn_barcode = $transaction_data->pawn_barcode;
+        $data = PawnData::where('pawn_barcode', $pawn_barcode)->first();
 
         return view('backend.pawn_online_transaction.interest.print',compact('data','interest_data','transaction_data'));
      }
@@ -67,7 +69,8 @@ class PawnOnlineTransactionController extends Controller
      public function InterestTransactionEdit(String $token_id){
 
         $transaction_data = PawnOnlineTransaction::where('token_id', $token_id)->first();
-        $data = PawnData::where('pawn_id',$transaction_data->pawn_id)->first();
+        $pawn_barcode = $transaction_data->pawn_barcode;
+        $data = PawnData::where('pawn_barcode', $pawn_barcode)->first();
         $interest_data = PawnInterestData::where('id',$transaction_data->pawn_id)->first();
         return view('backend.pawn_online_transaction.interest.edit',compact('data','interest_data','transaction_data'));
     }
