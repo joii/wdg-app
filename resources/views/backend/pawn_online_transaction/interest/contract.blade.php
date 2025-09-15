@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                    @if ($data != null)
+                    @if ($transaction_data != null)
                          <div class="card">
                         <div class="card-body">
                             <div class="invoice-title mt-4">
@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="flex-shrink-0">
                                         <div class="mb-4">
-                                            <h4 class="float-end font-size-16">สัญญาเลขที่ {{ \Carbon\Carbon::parse($data->transaction_date)->thaidate('y') }}{{sprintf('%05d', $data->pawn_id) }}</h4>
+                                            <h4 class="float-end font-size-16">สัญญาเลขที่ {{ \Carbon\Carbon::parse($transaction_data->transaction_date)->thaidate('y') }}{{sprintf('%05d', $data->pawn_id) }}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -67,12 +67,12 @@
                                     <div>
                                         <h5 class="font-size-15">วันที่ทำสัญญา:</h5>
                                         <p>
-                                            {{ \Carbon\Carbon::parse($data->transaction_date)->thaidate('l j F Y') }}
+                                            {{ \Carbon\Carbon::parse($transaction_data->transaction_date)->thaidate('l j F Y') }}
                                         </p>
                                     </div>
                                     <div>
                                         <h5 class="font-size-15">สาขาที่ทำสัญญา:</h5>
-                                        <p>สาขา {{ $data->branch_id }}</p>
+                                        <p>สาขา {{ $transaction_data->branch_id }}</p>
 
                                     </div>
                                 </div>
