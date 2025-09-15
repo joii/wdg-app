@@ -31,7 +31,7 @@
                                         </tr>
                                         <tr>
                                         <th >สถานที่ทำรายการ :</th>
-                                        <td>สาขา 1 พนัสนิคมตลาดใหม่</td>
+                                        <td>สาขา {{ $pawn_data->branch_id }}</td>
                                     </tr>
                                         <tr>
                                             <th>รหัสบาร์โค้ด :</th>
@@ -64,10 +64,10 @@
 
                                             @switch($type )
                                                 @case(1)
-                                                      คอ,แหวน,มือ ,ฯลฯ น้ำหนัก {{ $pawn_data->total_weight }} กรัม
+                                                       {{ Str::substr($pawn_data->type_full,3) }} น้ำหนัก {{ $pawn_data->total_weight }} กรัม
                                                     @break
                                                 @case(2)
-                                                      คอ,แหวน,มือ ,ฯลฯ น้ำหนัก {{ $pawn_data->total_weight }} กรัม
+                                                       {{ Str::substr($pawn_data->type_full,3) }}  น้ำหนัก {{ $pawn_data->total_weight }} กรัม
                                                     @break
                                                 @case(3)
                                                       {{ Str::substr($pawn_data->type_full,3) }}

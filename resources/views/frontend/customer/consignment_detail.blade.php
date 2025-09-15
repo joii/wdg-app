@@ -19,7 +19,7 @@
                                 <table class="table-data">
                                     <tr>
                                         <th style="width: 50%;">สถานที่ทำรายการ :</th>
-                                        <td>สาขา 1 พนัสนิคมตลาดใหม่</td>
+                                        <td>สาขา {{ $data->branch_id }}</td>
                                     </tr>
 
                                     <tr>
@@ -70,10 +70,10 @@
 
                                             @switch($type )
                                                 @case(1)
-                                                      คอ,แหวน,มือ ,ฯลฯ น้ำหนัก {{ $data->total_weight }} กรัม
+                                                      {{ Str::substr($data->type_full,3) }} น้ำหนัก {{ $data->total_weight }} กรัม
                                                     @break
                                                 @case(2)
-                                                      คอ,แหวน,มือ ,ฯลฯ น้ำหนัก {{ $data->total_weight }} กรัม
+                                                      {{ Str::substr($data->type_full,3) }}{{ $data->total_weight }} กรัม
                                                     @break
                                                 @case(3)
                                                       {{ Str::substr($data->type_full,3) }}
