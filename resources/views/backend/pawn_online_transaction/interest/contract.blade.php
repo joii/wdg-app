@@ -55,11 +55,11 @@
                                 <div class="col-sm-6">
                                     <div>
                                         <h5 class="font-size-15">เลขที่บาร์โค้ด:</h5>
-                                        <p>{{ $data->pawn_barcode }}</p>
+                                        <p>{{ $transaction_data->pawn_barcode }}</p>
                                     </div>
                                     <div>
                                         <h5 class="font-size-15">เลขที่บัตร:</h5>
-                                        <p>{{ $data->pawn_card_no }}</p>
+                                        {{-- <p>{{ $data->pawn_card_no }}</p> --}}
 
                                     </div>
                                 </div>
