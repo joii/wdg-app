@@ -131,7 +131,8 @@
                                             <tr>
                                                 <th scope="row">{{ $key+1 }}</th>
                                                 <td>  {{-- {{ \Carbon\Carbon::parse($data->pawn_date)->thaidate('j F Y') }} --}}
-                                                     {{ \Carbon\Carbon::parse($item->pawn_expire_date)->thaidate('j F Y') }}
+                                                     {{-- {{ \Carbon\Carbon::parse($item->pawn_expire_date)->thaidate('j F Y') }} --}}
+                                                     {{ \Carbon\Carbon::parse($data->pawn_expire_date)->addDays(30*($key+1))->thaidate('j F Y') }}
                                                 </td>
                                                 <td>{{ $item->interest }}</td>
                                                 <td class="text-end"><a class="btn btn-danger btn-rounded waves-effect waves-light">รอการชำระ</a></td>
