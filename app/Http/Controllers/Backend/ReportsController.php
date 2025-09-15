@@ -211,7 +211,7 @@ class ReportsController extends Controller
             }
         }
 
-        $data = array($data1,$data2);
+        $data = array($data1,$data2); //
         return view ('backend.reports.send_interest_report',compact('data','transactions','startOfLastWeek','endOfLastWeek' ));
     }
 
