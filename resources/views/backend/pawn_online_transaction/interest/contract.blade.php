@@ -83,9 +83,9 @@
                                     <div>
                                         <h5 class="font-size-15">ข้อมูลผู้ฝากขาย:</h5>
                                         <p>
-                                           <strong>ชื่อผู้ฝากขาย:</strong> {{ $data->customer_name }}<br/>
-                                            <strong>ข้อมูลติดต่อ:</strong> {{ $data->customer_address }}<br/>
-                                            <strong>เบอร์โทร:</strong> {{ $data->customer_phone }}<br/>
+                                           <strong>ชื่อผู้ฝากขาย:</strong> {{ $transaction_data->customer_name }}<br/>
+                                            <strong>ข้อมูลติดต่อ:</strong> {{ $transaction_data->customer_address }}<br/>
+                                            <strong>เบอร์โทร:</strong> {{ $transaction_data->customer_phone }}<br/>
                                             {{-- <strong>เลขประจำตัวประชาชน:</strong> {{ $data->id_card }} --}}
                                         </p>
                                     </div>
@@ -96,10 +96,13 @@
                                         <div>
                                             <h5 class="font-size-15">รายละเอียดสัญญา:</h5>
                                             <p>
-                                                <strong>ชื่อสินค้า:</strong> {{ $data->remarks }}<br/>
-                                                <strong>น้ำหนัก:</strong> {{ $data->total_weight }}<br/>
-                                                <strong>เงินต้น:</strong> {{ number_format($data->amount) }} บาท<br/>
-                                                <strong>ดอกเบี้ย:</strong>{{ number_format($data->payment_amount) }} บาท<br/>
+                                                <strong>ชื่อสินค้า:</strong> {{ $transaction_data->remarks }}<br/>
+                                                <strong>น้ำหนัก:</strong> {{ $transaction_data->total_weight }}<br/>
+                                                 <strong>วงเงินเดิม:</strong>{{ number_format($data->total_pawn_amount) }} บาท<br/>
+                                                <strong>อัตราดอกเบี้ย:</strong>ร้อยละ {{ number_format($data->percent_interest) }}<br/>
+                                                <hr/>
+                                                <strong>ระยะเวลาฝาก:</strong>{{ number_format($transaction_data->number_of_month) }} เดือน<br/>
+                                                <strong>ฝากดอกเบี้ย:</strong>{{ number_format($transaction_data->payment_amount) }} บาท<br/>
                                                 {{-- <strong>กำหนดส่งดอก/ไถ่ถอน:</strong> {{ \Carbon\Carbon::parse($data->transaction_date)->addDays(60)->thaidate('j F Y') }}<br/> --}}
                                             </p>
                                         </div>
@@ -113,7 +116,7 @@
                                 <div class="col-sm-6">
                                     <div>
                                         <h5 class="font-size-15">ลงชื่อ:</h5>
-                                        <p>{{ $data->customer_name }}</p>
+                                        <p>{{ $transaction_data->customer_name }}</p>
                                     </div>
 
                                 </div>
@@ -122,7 +125,7 @@
                                         <div>
                                             <h5 class="font-size-15">ผู้ทำรายการ:</h5>
                                             <p>
-                                               23
+                                               {{ $transaction_data->approved_by }}
                                             </p>
                                         </div>
 

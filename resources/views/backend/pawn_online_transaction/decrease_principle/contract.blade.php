@@ -141,7 +141,7 @@
                                         <div>
                                             <h5 class="font-size-15">ผู้ทำรายการ:</h5>
                                             <p>
-                                               23
+                                               {{ $transaction_data->approved_by }}
                                             </p>
                                         </div>
 

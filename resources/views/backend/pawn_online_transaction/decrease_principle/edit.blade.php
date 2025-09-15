@@ -69,9 +69,9 @@
                                         <input class="form-control" type="text" name="pawn_date"  id="pawn_date" value="{{ \Carbon\Carbon::parse($data->pawn_date)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
                                     </div>
 
-                                    <div >
-                                        <label for="pawn_date_cal_interest" class="form-label form-edit">วันที่ต่อสัญญา:</label>
-                                        <input class="form-control" type="text" name="pawn_date_cal_interest"  id="pawn_date_cal_interest" value="{{ \Carbon\Carbon::parse($data->pawn_date_cal_interest)->timezone('UTC')->thaidate('Y-m-d') }}" disabled>
+                                     <div >
+                                        <label for="period" class="form-label form-edit">ระยะเวลากำหนด (เดือน):</label>
+                                        <input class="form-control" type="text" name="period"  id="period" value="{{ $data->period }}" disabled>
                                     </div>
                                 </div>
 
@@ -132,13 +132,11 @@
                                             <input class="form-control" type="text" name="total_pawn_amount_first"  id="total_pawn_amount_first" value="{{ $data->total_pawn_amount_first }}" disabled >
                                         </div>
                                         <div>
-                                            <label for="percent_interest" class="form-label form-edit">ยอดเงินโอน:</label>
+                                            <label for="percent_interest" class="form-label form-edit">ยอดเงินที่ได้รับ:</label>
                                             <input class="form-control" type="text"  value="{{ $transaction_data->payment_amount }}" disabled >
                                         </div>
                                          <div>
-                                            <label for="percent_interest" class="form-label form-edit">หักดอกเบี้ยค้างชำระ/ส่งดอก@auth()
-
-                                            @endauth</label>
+                                            <label for="percent_interest" class="form-label form-edit">หักดอกเบี้ยค้างชำระ/ส่งดอก :</label>
                                             <input class="form-control" type="text"  value="{{ $transaction_data->interest }}" disabled >
                                         </div>
 
