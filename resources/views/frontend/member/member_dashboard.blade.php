@@ -44,12 +44,12 @@
                         <div class="card-body">
                             <div class="info-row">
                                 <p>สินค้า:
-                                    {{-- {{ Str::substr($item->type_full ,3)}} --}}
+                                    {{ Str::substr($item->type_full ,3)}}
                                      @php
                                                 $type = Str::substr($item->type_full,1,1);
-                                            @endphp
+                                     @endphp
 
-                                            @switch($type )
+                                            {{-- @switch($type )
                                                 @case(1)
                                                       คอ,แหวน,มือ ,ฯลฯ
                                                     @break
@@ -62,7 +62,7 @@
 
                                                 @default
 
-                                            @endswitch
+                                            @endswitch --}}
                                 </p>
                                 <p class="price">น้ำหนัก: {{ $item->total_weight }} กรัม</p>
                             </div>
@@ -89,7 +89,7 @@
 
                      <form  method="post" action="{{ route('member.customer_confirmation') }}" >
                         @csrf
-                        <input type="hidden" name="key" value="{{$key }}">
+                         <input type="hidden" name="key" value="{{$confirm_data->key }}">
                          <input type="hidden" name="id" value="{{$id }}">
                         <button class="btn btn-green-dark w-100 " type="submit" id="customer_confirm">
                             ยืนยันธุรกรรมของคุณ
