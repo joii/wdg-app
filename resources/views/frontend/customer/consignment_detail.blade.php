@@ -138,7 +138,8 @@
                                     <tr>
                                         <td class="text-center">{{ $key+1 }}</td>
                                         {{-- <td>{{ \Carbon\Carbon::parse($data->pawn_expire_date)->thaidate('j F Y') }}</td> --}}
-                                        <td>{{ \Carbon\Carbon::parse($data->pawn_expire_date)->addDays(30*($key+1))->thaidate('j F Y') }}</td>
+                                        {{-- {{ \Carbon\Carbon::parse($data->pawn_expire_date)->addDays(30*($key+1))->thaidate('j F Y') }} --}}
+                                        <td>{{ \Carbon\Carbon::parse($data->pawn_expire_date)->addDays(30*($key))->thaidate('j F Y') }}</td>
                                         <td class="text-center">{{ $interest->interest }}</td>
                                         {{-- <td>{{ รอการชำระ }}</td> --}}
                                     </tr>
