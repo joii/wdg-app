@@ -71,6 +71,25 @@
                      </div>
                   </div>
                 </div>
+                @else
+                 @php
+                    $id = Auth::guard('member')->id();
+                    $profileData = App\Models\Member::find($id);
+                    $pawnData = App\Models\PawnData::where('member_id', $id)->get();
+                @endphp
+
+                <div class="card" style="min-height: 190px; background-color:#00896b;color:#fff;">
+                  <div class="card-body">
+                   <p>
+                    ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }} <br/>
+                    คุณมีรายการธุรกรรม {{  count($pawnData)>0?count($pawnData):0 }} รายการ
+                   </p>
+                    <div class="py-sm-3 py-2">
+                         <a class="btn login h-50 w-100" href="{{ route('member.member_dashboard') }}" >ดูรายการธรกรรมของคุณ</a>
+                     </div>
+                  </div>
+                </div>
+
                 @endif
 
             </div>
