@@ -12,6 +12,18 @@ a.profile{
 a.profile:hover{
     text-decoration: underline;
 }
+
+.btn-outline {
+  border: 1px solid #fff;
+  background-color: transparent;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 10px;
+  color:#fff;
+  text-decoration: none !important;
+  margin-right: 5px;
+}
+
 </style>
 <header class="header">
     <div class="container">
@@ -97,14 +109,14 @@ a.profile:hover{
             </div>
 
             <div class="info">
-                 <h3>
-                    <a href="{{ route('member.member_profile') }}" class="profile">ยินดีต้อนรับ {{ $profileData->firstname }} {{ $profileData->lastname }}</a>
+                 <h3>ยินดีต้อนรับ
+                    <a href="{{ route('member.member_profile') }}" class="profile">{{ $profileData->firstname }} {{ $profileData->lastname }}</a>
                 </h3>
                 {{-- <p>คุณมีสัญญาทั้งหมด  รายการ</p> --}}
-                 <p>
-                    <a href="{{ route('member.member_dashboard') }}">ธุรกรรมของคุณ</a> |
-                    <a href="{{ route('customer.transaction_history') }}">ทำรายการ</a> |
-                    <a href="{{ route('member.logout') }}">ออกจากระบบ</a>
+                 <p class="pt-2">
+                    <a href="{{ route('member.member_dashboard') }}" class="btn-outline">ธุรกรรมของคุณ</a>
+                    <a href="{{ route('customer.transaction_history') }}" class="btn-outline">ทำรายการ</a>
+                    <a href="{{ route('member.logout') }}" class="btn-outline">ออกจากระบบ</a>
                 </p>
             </div>
         </div>
