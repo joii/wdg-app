@@ -89,7 +89,7 @@
 
                      <form  method="post" action="{{ route('member.customer_confirmation') }}" >
                         @csrf
-                         <input type="hidden" name="key" value="{{$confirm_data->key }}">
+                         <input type="hidden" name="key" value="{{$key }}">
                          <input type="hidden" name="id" value="{{$id }}">
                         <button class="btn btn-green-dark w-100 " type="submit" id="customer_confirm">
                             ยืนยันธุรกรรมของคุณ
