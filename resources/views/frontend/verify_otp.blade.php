@@ -16,7 +16,7 @@
                         </div>
                         @endif
 
-                        <form class="row g-3 " method="post" action="{{ route('otp.verify') }}">>
+                        <form class="row g-3 " method="post" action="{{ route('otp.verify') }}">
                             @csrf
                               <input type="hidden" name="token" value="{{ $token }}">
                               <input type="hidden" name="phone" value="{{ $phone }}">
@@ -41,32 +41,27 @@
                              <p>โปรดระบุ OTP ภายใน <span id="countdown">5</span> นาที</p>
                         </form>
                       <script>
-    let countdownElement = document.getElementById("countdown");
-    let resendBtn = document.getElementById("resendBtn");
+                        let countdownElement = document.getElementById("countdown");
+                        let resendBtn = document.getElementById("resendBtn");
 
-    let timeLeft = 300; // 5 นาที = 300 วินาที
-    let timer = setInterval(updateCountdown, 1000);
+                        let timeLeft = 300; // 5 นาที = 300 วินาที
+                        let timer = setInterval(updateCountdown, 1000);
 
-    function updateCountdown(){
-        if(timeLeft <= 1){
-            clearInterval(timer);
-            resendBtn.disabled = false;
-            countdownElement.innerHTML = "00:00";
-            resendBtn.innerText = "Resend OTP";
-        } else {
-            timeLeft -= 1;
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            countdownElement.innerHTML =
-                String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
-        }
-    }
-
-
-</script>
-
-
-
+                        function updateCountdown(){
+                            if(timeLeft <= 1){
+                                clearInterval(timer);
+                                resendBtn.disabled = false;
+                                countdownElement.innerHTML = "00:00";
+                                resendBtn.innerText = "Resend OTP";
+                            } else {
+                                timeLeft -= 1;
+                                let minutes = Math.floor(timeLeft / 60);
+                                let seconds = timeLeft % 60;
+                                countdownElement.innerHTML =
+                                    String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+                            }
+                        }
+                    </script>
                     </div>
             </div><!--boxed-->
         </div>
