@@ -141,10 +141,14 @@ class AuthController extends Controller
 
     public function showVerifyForm(Request $request)
     {
-        return view('frontend.verify_otp', [
-            'token' => $request->query('token'), // รับ token จาก redirect
-            'phone' => $request->query('phone'),
-        ]);
+        // return view('frontend.verify_otp', [
+        //     'token' => $request->query('token'), // รับ token จาก redirect
+        //     'phone' => $request->query('phone'),
+        // ]);
+
+        $token = $request->query('token');
+        $phone = $request->query('phone');
+        return view('frontend.verify_otp',compact('token','phone'));
     }
 
 
