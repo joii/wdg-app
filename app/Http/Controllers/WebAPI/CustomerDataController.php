@@ -9,6 +9,8 @@ use App\Http\Requests\CustomerDataRequest;
 use App\Models\Customers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -49,19 +51,13 @@ class CustomerDataController extends Controller
             //$csvFile = storage_path('app/public/Customer_20250610_135102.csv');
 
             $file = $this->findLatestImportFile();
-
-
-
             $csvFile = storage_path('app/public/import/'.$file);
 
+        try{
 
-            if (file_exists($csvFile)) {
+             if (file_exists($csvFile)) {
                 Excel::import(new \App\Imports\CustomerDataImport, $csvFile);
 
-                //  return response()->json([
-                //     'status' => 'success',
-                //     'message' => 'Operation successful.'
-                // ], 201);
 
                 $fileProcessed = storage_path("app/public/import/processed/{$file}");
 
@@ -86,6 +82,27 @@ class CustomerDataController extends Controller
                     'message' => $file.' is not found.'
                 ], 200);
             }
+
+        }catch (\Throwable $e) {
+        // Log failed
+        Log::error("CSV import failed for {$file}", [
+            'error' => $e->getMessage(),
+        ]);
+
+        if($file==null){
+            $file = "Customer_".date('Ymd').'_'.date('His').'.csv';
+        }
+
+        DB::table('import_logs')->insert([
+            'filename' => $file,
+            'status'   => 'failed',
+            'error'    => $e->getMessage(),
+            'message'    => $file.' not found.',
+            'code'       => 404, // HTTP Status Code 200 เสร็จสิ้น
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
 
 
     }
