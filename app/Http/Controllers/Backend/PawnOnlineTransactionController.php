@@ -400,11 +400,15 @@ class PawnOnlineTransactionController extends Controller
 
     public function CancelTransaction(Request $request){
         $data = PawnOnlineTransaction::findOrFail($request->id);
+        $admin_id = Auth::guard('admin')->id();
+        $profileData = Admin::find($admin_id);
+
+
         $data->is_erased = TRUE; // Cancel transaction
         $data->erased_date = Carbon::now();
         $data->updated_at = Carbon::now();
-        $data->approved_by = Auth::user()->name;
-        $data->remarks = $request->remark;
+        $data->approved_by = $profileData->name;
+        $data->remarks = $request->remarks;
         $data->save();
 
         $notification = array(
