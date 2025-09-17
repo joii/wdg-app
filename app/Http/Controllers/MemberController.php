@@ -36,7 +36,7 @@ class MemberController extends Controller
 
     // Check if member have confirm transaction
      $confirm_data = $profileData->confirm_customer;
-     $key = '';
+     $key = $phone;
      return view('frontend.member.member_dashboard',compact('data','count','confirm_data','key'));
     }
 
