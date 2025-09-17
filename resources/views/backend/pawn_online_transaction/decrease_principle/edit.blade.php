@@ -184,7 +184,7 @@
                                 <input type="hidden" name="id" value="{{ $transaction_data->id}}" />
                                 <input type="hidden" name="token_id" value="{{ $transaction_data->token_id}}" />
 
-                                @if($transaction_data->is_erased == 1)
+                                @if($transaction_data->is_erased != 1)
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">บันทึกข้อมูล</button>
                                 <button type="button" class="btn btn-danger waves-effect waves-light" onclick="if(confirm('ยืนยันการลบ?')) {  document.getElementById('form_cancel').submit(); }">ยกเลิกสัญญา</button>
                                 @endif

@@ -81,7 +81,7 @@
                                         <input class="form-control" type="text" name="branch_id"  id="branch_id" value="{{ $data->branch_id }}" disabled>
                                     </div>
                                     <div class="pt-4">
-                                        @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)
+                                        @if($transaction_data->is_erased == 1)
                                            <h2 class="text-danger">ยกเลิกสัญญาแล้ว</h2>
                                         @endif
                                     </div>
@@ -171,7 +171,7 @@
                             <div class="mt-4">
                                 <input type="hidden" name="id" value="{{ $transaction_data->id}}" />
                                 <input type="hidden" name="token_id" value="{{ $transaction_data->token_id}}" />
-                                 @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)
+                                @if($transaction_data->is_erased != 1)
                                 <button type="submit" class="btn btn-primary waves-effect waves-light">บันทึกข้อมูล</button>
                                 <button type="button" class="btn btn-danger waves-effect waves-light" onclick="if(confirm('ยืนยันการลบ?')) {  document.getElementById('form_cancel').submit(); }">ยกเลิกสัญญา</button>
                                 @endif
