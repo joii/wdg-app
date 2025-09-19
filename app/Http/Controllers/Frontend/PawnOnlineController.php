@@ -500,7 +500,7 @@ class PawnOnlineController extends Controller
             'member_id' => Auth::guard('member')->id(),
             'customer_id' => $pawn_add_data->customer_id,
             'interest' => $request->interest,
-            'amount' => $request->add_amoun,
+            'amount' => $request->add_amount,
             'payment_amount' => $request->add_amount-$request->interest,
             'payment_status' => 'pending',
             'customer_name' => $pawn_data->customer_name,
