@@ -140,7 +140,7 @@
                                     <tr>
                                         <th>จำนวนเงิน :</th>
                                         <td>
-                                            @switch($item->transaction_typ)
+                                            @switch($item->transaction_type)
                                                 @case('dec')
                                                     {{ number_format($item->amount) }} บาท
                                                     @break
