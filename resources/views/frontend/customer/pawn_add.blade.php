@@ -163,10 +163,15 @@
                                     messageElement.textContent = "ระบุจำนวนเงินที่ต้องการชำระขั้นต่ำ 100 บาท";
                                     messageElement.style.color = "red";
                                     //submit_btn.hide();
+
+                                    return false;
                                 } else {
                                     messageElement.textContent = "";
                                     messageElement.style.color = "green";
                                     //submit_btn.show();
+
+                                    return true
+
 
                                 }
                             }
@@ -191,7 +196,7 @@
                                             <input type="hidden" name="customer_id" value="{{ $pawn_add_data->customer_id }}">
                                             <input type="hidden" name="interest" value="{{ $pawn_send_data->interest }}">
                                             <input type="hidden" name="add_amount" id="add_amount" value="">
-                                            <button class="btn btn-red mx-1 w-135" type="submit" id="submit_btn" onsubmit="checkValue();">
+                                            <button class="btn btn-red mx-1 w-135" type="submit" id="submit_btn" onsubmit="return checkValue();">
                                             ยื่นคำขอ
                                             </button>
                                         </form>
@@ -207,7 +212,7 @@
                                             <input type="hidden" name="customer_id" value="{{ $pawn_add_data->customer_id }}">
                                             <input type="hidden" name="interest" value="{{ $pawn_send_data->interest }}">
                                             <input type="hidden" name="add_amount" id="add_amount" value="">
-                                            <button class="btn  mx-1 w-135" type="submit" id="submit_btn" onsubmit="checkValue();">
+                                            <button class="btn  mx-1 w-135" type="submit" id="submit_btn" onsubmit="return checkValue();">
                                                 ยื่นคำขอ
                                             </button>
                                         </form>

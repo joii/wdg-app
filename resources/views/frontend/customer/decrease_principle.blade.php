@@ -156,10 +156,14 @@
                                     messageElement.textContent = "ระบุจำนวนเงินที่ต้องการชำระขั้นต่ำ 100 บาท";
                                     messageElement.style.color = "red";
                                     //submit_btn.hide();
+
+                                    return false;
                                 } else {
                                     messageElement.textContent = "";
                                     messageElement.style.color = "green";
                                     //submit_btn.show();
+
+                                    return true;
 
                                 }
                             }
@@ -174,7 +178,7 @@
                                     @csrf
                                     <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
                                     <input type="hidden" name="add_amount" id="add_amount" value="">
-                                    <button class="btn btn-red w-100 mx-auto" type="submit" id="submit_btn" onsubmit="checkValue();">
+                                    <button class="btn btn-red w-100 mx-auto" type="submit" id="submit_btn" onsubmit="return checkValue();">
                                         ยื่นคำขอลดเงินต้น
                                     </button>
                                   </form>
