@@ -7,12 +7,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0 font-size-18">รายการขายฝากหน้าร้านวันนี้</h4>
+                    <h4 class="mb-sm-0 font-size-18">รายการขายฝากหน้าร้านล่าสุด</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">ภาพรวม</a></li>
-                            <li class="breadcrumb-item active">รายการขายฝากหน้าร้านวันนี้</li>
+                            <li class="breadcrumb-item active">รายการขายฝากหน้าร้านล่าสุด</li>
                         </ol>
                     </div>
 
@@ -42,29 +42,30 @@
                                 <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                     <thead>
                                         <tr class="bg-transparent">
-
-                                                <th>เลขที่สัญญา</th>
-                                                <th>วันที่ทำสัญญา</th>
-                                                <th>รหัสบาร์โค้ด</th>
-                                                <th>สินค้า</th>
-                                                <th>น้ำหนัก</th>
-                                                <th>มูลค่า</th>
-                                                <th>ลูกค้า</th>
-                                            {{-- <th style="width: 150px;">ดาวน์โหลด</th> --}}
+                                            <th>ลำดับ</th>
+                                            <th>เลขที่สัญญา</th>
+                                            <th>วันที่ทำสัญญา/วันที่ต่อสัญญา</th>
+                                            <th>รหัสบาร์โค้ด</th>
+                                            <th>สินค้า</th>
+                                            <th>น้ำหนัก</th>
+                                            <th>มูลค่า</th>
+                                            <th>ลูกค้า</th>
+                                            <th>สถานะ</th>
                                             <th style="width: 90px;"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($pawn_data as $item)
                                         <tr>
+                                            <td>{{ $loop->index+1 }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('y') }}{{sprintf('%05d', $item->pawn_id) }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F Y') }}</td>
-                                                <td>{{ $item->pawn_barcode }}</td>
-                                                <td>{{ $item->remarks }}</td>
-                                                <td>{{ $item->total_weight }}</td>
-                                                <td>{{ $item->total_pawn_amount }}</td>
-                                                <td>{{ $item->customer_name }}</td>
-
+                                            <td> {{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F Y') }}<br/>{{ \Carbon\Carbon::parse($item->pawn_date_cal_interest)->thaidate('j F Y') }}</td>
+                                            <td>{{ $item->pawn_barcode }}</td>
+                                            <td>{{ $item->remarks }}</td>
+                                            <td>{{ $item->total_weight }}</td>
+                                            <td>{{ $item->total_pawn_amount }}</td>
+                                            <td>{{ $item->customer_name }}</td>
+                                            <td> <div class="dot {{ $item->is_erased=='1'?'danger':'success' }}" ></div></td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
