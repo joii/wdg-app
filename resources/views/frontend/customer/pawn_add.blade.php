@@ -140,7 +140,7 @@
                                         ยกเลิก
                                         </a>
                                         @if ($count_send_data >0)
-                                        {{ $pawn_data->pawn_barcode }}
+
                                         <form action="{{ route('customer.increase.comfirm_increase_principle')}}" method="post" id="pay_outstanding">
                                             @csrf
                                             <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
