@@ -37,6 +37,22 @@
         <link href="{{ asset('backend/assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
         <!-- Toastr Css-->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+        <style>
+        .dot {
+        height: 10px;
+        width: 10px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        }
+
+        .danger{
+            background-color: var(--bs-red);
+        }
+        .success{
+            background-color: var(--bs-green);
+        }
+        </style>
 
     </head>
 

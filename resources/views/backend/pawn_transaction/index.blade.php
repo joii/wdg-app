@@ -62,6 +62,7 @@
                                     <thead>
                                         <tr class="bg-transparent">
 
+                                                <th>ลำดับ</th>
                                                 <th>เลขที่สัญญา</th>
                                                 <th>วันที่ทำสัญญา/วันที่ต่อสัญญา</th>
                                                 <th>รหัสบาร์โค้ด</th>
@@ -69,6 +70,7 @@
                                                 <th>น้ำหนัก</th>
                                                 <th>มูลค่า</th>
                                                 <th>ลูกค้า</th>
+                                                <th>สถานะ</th>
 
                                             <th style="width: 90px;"></th>
                                         </tr>
@@ -76,6 +78,7 @@
                                     <tbody>
                                         @foreach ($pawn_data as $item)
                                         <tr>
+                                                <td>{{ $loop->index+1 }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('y') }}{{sprintf('%05d', $item->pawn_id) }}</td>
                                                 <td> {{ \Carbon\Carbon::parse($item->pawn_date)->thaidate('j F Y') }}<br/>{{ \Carbon\Carbon::parse($item->pawn_date_cal_interest)->thaidate('j F Y') }}</td>
                                                 <td>{{ $item->pawn_barcode }}</td>
@@ -83,6 +86,7 @@
                                                 <td>{{ $item->total_weight }}</td>
                                                 <td>{{ $item->total_pawn_amount }}</td>
                                                 <td>{{ $item->customer_name }}</td>
+                                                <td> <div class="dot {{ $item->is_erased=='1'?'danger':'success' }}" ></div></td>
 
                                             <td>
                                                 <div class="dropdown">

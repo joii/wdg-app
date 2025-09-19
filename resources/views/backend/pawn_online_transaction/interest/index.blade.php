@@ -63,6 +63,7 @@
                                     <thead>
                                         <tr class="bg-transparent">
 
+                                                <th>ลำดับ</th>
                                                 <th>เลขที่สัญญา</th>
                                                 <th>วันที่ทำสัญญา</th>
                                                 <th>รหัสบาร์โค้ด</th>
@@ -70,6 +71,7 @@
                                                 <th>มูลค่า</th>
                                                 <th>ดอกเบี้ย</th>
                                                 <th>ลูกค้า</th>
+                                                <th>สถานะ</th>
 
                                             <th style="width: 90px;"></th>
                                         </tr>
@@ -77,6 +79,7 @@
                                     <tbody>
                                         @foreach ($pawn_data as $item)
                                         <tr>
+                                                <td>{{ $loop->index+1 }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('y') }}{{sprintf('%05d', $item->id) }}</td>
                                                 <td> {{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('j F Y') }}</td>
                                                 <td>{{ $item->pawn_barcode }}</td>
@@ -84,6 +87,7 @@
                                                 <td>{{ $item->total_pawn_amount }}</td>
                                                 <td>{{ $item->payment_amount }}</td>
                                                 <td>{{ $item->customer_name }}</td>
+                                                <td> <div class="dot {{ $item->status=='pending'?'danger':'success' }}" ></div></td>
 
                                             <td>
                                                 <div class="dropdown">

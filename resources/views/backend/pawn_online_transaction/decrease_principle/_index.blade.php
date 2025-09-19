@@ -31,14 +31,14 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="mb-4">
-                                        <a href="{{ route('backend.reports.increase_principle_report') }}">
+                                        <a href="{{ route('backend.reports.decrease_principle_report') }}">
                                         <button type="button" class="btn btn-light waves-effect waves-light">ออกรายงาน</button>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="col-sm-auto">
                                     <div class="d-flex align-items-center gap-1 mb-4">
-                                        <form action="{{ route('backend.online_transaction.increase_custom') }}" method="POST" id="custom_transaction">
+                                        <form action="{{ route('backend.online_transaction.decrease_custom') }}" method="POST" id="custom_transaction">
                                             @csrf
                                             <div class="input-group datepicker-range">
                                                 <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
@@ -59,10 +59,9 @@
                             <!-- end row -->
 
                             <div class="table-responsive">
-                                <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                                <table class="table align-middle datatable dt-responsive  nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
                                     <thead>
                                         <tr class="bg-transparent">
-
                                             <th>ลำดับ</th>
                                             <th>เลขที่สัญญา</th>
                                             <th>วันที่ทำสัญญา</th>
@@ -78,7 +77,6 @@
                                     <tbody>
                                         @foreach ($pawn_data as $item)
                                         <tr>
-                                            <td>{{ $loop->index+1 }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('y') }}{{sprintf('%05d', $item->id) }}</td>
                                             <td> {{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('j F Y') }}</td>
                                             <td>{{ $item->pawn_barcode }}</td>
@@ -93,10 +91,10 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.contract',[$item->pawn_barcode,$item->token_id]) }}" target="_blank">หนังสือสัญญา</a></li>
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
                                                         {{-- <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.detail',$item->token_id) }}" >รายละเอียด</a></li> --}}
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.edit',$item->token_id) }}">แก้ไข</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.edit',$item->token_id) }}">แก้ไข</a></li>
                                                     </ul>
                                                 </div>
                                             </td>

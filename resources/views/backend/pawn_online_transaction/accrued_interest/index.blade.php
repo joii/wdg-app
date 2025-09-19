@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <!-- start page title -->
         <div class="row">
-            <div class="col-12">
+           <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0 font-size-18">รายการส่งดอก</h4>
 
@@ -31,14 +31,14 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="mb-4">
-                                        <a href="{{ route('backend.reports.outstanding_interest_report') }}">
+                                        <a href="{{ route('backend.reports.interest_report') }}">
                                         <button type="button" class="btn btn-light waves-effect waves-light">ออกรายงาน</button>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-sm-auto">
+                                 <div class="col-sm-auto">
                                     <div class="d-flex align-items-center gap-1 mb-4">
-                                        <form action="{{ route('backend.online_transaction.accrued_interest_custom') }}" method="POST" id="custom_transaction">
+                                        <form action="{{ route('backend.online_transaction.interest_custom') }}" method="POST" id="custom_transaction">
                                             @csrf
                                             <div class="input-group datepicker-range">
                                                 <input type="text" class="form-control flatpickr-input" data-input aria-describedby="date1" name="date_filter" id="date_filter"">
@@ -63,6 +63,7 @@
                                     <thead>
                                         <tr class="bg-transparent">
 
+                                                <th>ลำดับ</th>
                                                 <th>เลขที่สัญญา</th>
                                                 <th>วันที่ทำสัญญา</th>
                                                 <th>รหัสบาร์โค้ด</th>
@@ -70,6 +71,7 @@
                                                 <th>มูลค่า</th>
                                                 <th>ดอกเบี้ย</th>
                                                 <th>ลูกค้า</th>
+                                                <th>สถานะ</th>
 
                                             <th style="width: 90px;"></th>
                                         </tr>
@@ -77,6 +79,7 @@
                                     <tbody>
                                         @foreach ($pawn_data as $item)
                                         <tr>
+                                                <td>{{ $loop->index+1 }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('y') }}{{sprintf('%05d', $item->id) }}</td>
                                                 <td> {{ \Carbon\Carbon::parse($item->transaction_date)->thaidate('j F Y') }}</td>
                                                 <td>{{ $item->pawn_barcode }}</td>
@@ -84,6 +87,7 @@
                                                 <td>{{ $item->total_pawn_amount }}</td>
                                                 <td>{{ $item->payment_amount }}</td>
                                                 <td>{{ $item->customer_name }}</td>
+                                                <td> <div class="dot {{ $item->status=='pending'?'danger':'success' }}" ></div></td>
 
                                             <td>
                                                 <div class="dropdown">
@@ -91,10 +95,10 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
                                                         {{-- <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.detail',$item->token_id) }}" >รายละเอียด</a></li> --}}
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.edit',$item->token_id) }}">แก้ไข</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.edit',$item->token_id) }}">แก้ไข</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
