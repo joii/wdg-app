@@ -282,7 +282,7 @@ class PawnOnlineController extends Controller
                 'payment_method' => $request->payment_method,
                 'payment_date' => $request->payment_date,
                 'payment_slip' => $save_url,
-                'payment_status' => $request->payment_status,
+                'payment_status' => 'pending',
                 'customer_name' => $request->customer_name,
                 'customer_address' => $request->customer_address,
                 'customer_phone' => $request->customer_phone,
@@ -457,12 +457,12 @@ class PawnOnlineController extends Controller
                 'payment_method' => NULL, // ไม่ได้รับโอนจากลูกค้า
                 'payment_date' => Carbon::now(),
                 'payment_slip' => NULL,
-                'payment_status' => 'paid',
+                'payment_status' => 'pending',
                 'customer_name' => $pawn_data->customer_name,
                 'customer_address' => $pawn_data->customer_address,
                 'customer_phone' => $pawn_data->customer_phone,
                 'id_card' => $pawn_data->id_card,
-                'status' => 'paid',
+                'status' => 'pending',
                 'created_at' => Carbon::now(),
             ]);
 
@@ -479,7 +479,7 @@ class PawnOnlineController extends Controller
                 'pawn_outstanding_interest_id' => $pawn_outstanding_interest_id,
                 'yup_id' =>  NULL,
                 'withdrawn_id' =>  NULL,
-                'payment_status' =>'paid',
+                'payment_status' =>'pending',
                 'created_at' => Carbon::now(),
             ]);
 
