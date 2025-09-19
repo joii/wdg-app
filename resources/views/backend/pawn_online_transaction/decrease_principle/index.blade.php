@@ -93,10 +93,9 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.contract',[$item->pawn_barcode,$item->token_id]) }}" target="_blank">หนังสือสัญญา</a></li>
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
-                                                        {{-- <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.detail',$item->token_id) }}" >รายละเอียด</a></li> --}}
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.increase_principle.edit',$item->token_id) }}">แก้ไข</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.decrease_principle.edit',$item->token_id) }}">แก้ไข</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
