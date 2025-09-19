@@ -95,11 +95,11 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
-                                                        {{-- <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.detail',$item->token_id) }}" >รายละเอียด</a></li> --}}
-                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.interest.edit',$item->token_id) }}">แก้ไข</a></li>
-                                                    </ul>
+                                                         <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.contract',$item->pawn_barcode) }}" target="_blank">หนังสือสัญญา</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.print',$item->pawn_barcode) }}" target="_blank">พิมพ์</a></li>
+                                                        <li><a class="dropdown-item" href="{{ route('backend.online_transaction.accrued_interest.edit',$item->token_id) }}">แก้ไข</a></li>
+                                                    </ul>                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>
