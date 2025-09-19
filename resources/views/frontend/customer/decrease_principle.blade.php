@@ -120,8 +120,50 @@
                             <div class="form-group mt-4">
                                 <label class="title">ระบุจำนวนเงินที่ต้องการชำระ (ขั้นต่ำ 100 บาท)</label>
                                 <input type="text" class="form-control style-2" id="amount_request" name="amount_request">
+                                 <p id="message"></p>
 
                             </div>
+                             <script>
+                               document.getElementById('amount_request').onchange = function() {
+                                // Get the value from the input and convert it to a number
+                                let inputValue = Number(document.getElementById('amount_request').value);
+
+                                // Get the message paragraph element
+                                let messageElement = document.getElementById('message');
+                                let submit_btn = document.getElementById('submit_btn');
+
+                                // Check if the value is greater than 100
+                                if (inputValue <= 100) {
+                                    messageElement.textContent = "ระบุจำนวนเงินที่ต้องการชำระขั้นต่ำ 100 บาท";
+                                    messageElement.style.color = "red";
+                                    //submit_btn.hide();
+                                } else {
+                                    messageElement.textContent = "";
+                                    messageElement.style.color = "green";
+                                    //submit_btn.show();
+
+                                }
+                            };
+
+                            function checkValue() {
+
+                                // Get the message paragraph element
+                                let messageElement = document.getElementById('message');
+                                let submit_btn = document.getElementById('submit_btn');
+
+                                // Check if the value is greater than 100
+                                if (inputValue <= 100) {
+                                    messageElement.textContent = "ระบุจำนวนเงินที่ต้องการชำระขั้นต่ำ 100 บาท";
+                                    messageElement.style.color = "red";
+                                    //submit_btn.hide();
+                                } else {
+                                    messageElement.textContent = "";
+                                    messageElement.style.color = "green";
+                                    //submit_btn.show();
+
+                                }
+                            }
+                            </script>
 
                         </div>
 
@@ -132,7 +174,7 @@
                                     @csrf
                                     <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
                                     <input type="hidden" name="add_amount" id="add_amount" value="">
-                                    <button class="btn btn-red w-100 mx-auto" type="submit">
+                                    <button class="btn btn-red w-100 mx-auto" type="submit" id="submit_btn" onsubmit="checkValue();">
                                         ยื่นคำขอลดเงินต้น
                                     </button>
                                   </form>
