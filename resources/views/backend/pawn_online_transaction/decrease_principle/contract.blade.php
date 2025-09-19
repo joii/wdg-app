@@ -85,7 +85,7 @@
 
                                     </div>
                                      <div >
-                                        @if($transaction_data->is_erased == 'TRUE' || $transaction_data->is_erased == TRUE || $transaction_data->is_erased == 1)
+                                        @if($transaction_data->is_erased == 1)
                                            <h2 class="text-danger">ยกเลิกสัญญาแล้ว</h2>
                                            <p> ยกเลิกวัน{{ \Carbon\Carbon::parse($data->erased_date)->thaidate('l j F Y') }}</p>
                                         @endif
