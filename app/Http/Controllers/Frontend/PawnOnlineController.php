@@ -182,7 +182,7 @@ class PawnOnlineController extends Controller
 
     // ส่งดอกก่อนทำการเพิ่มต้น
     public function PawnAddCheckOutstandingInterest(Request $request){
-         $pawn_barcode = $request->barcode;
+         $pawn_barcode = $request->pawn_barcode;
 
          $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
          $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
@@ -392,7 +392,7 @@ class PawnOnlineController extends Controller
 
 
       public function ConfirmIncreasePrinciple(Request $request){
-        $pawn_barcode = $request->barcode;
+        $pawn_barcode = $request->pawn_barcode;
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
@@ -561,7 +561,7 @@ class PawnOnlineController extends Controller
     }
 
     public function ConfirmDecreasePrinciple(Request $request){
-        $pawn_barcode = $request->barcode;
+        $pawn_barcode = $request->pawn_barcode;
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 

@@ -176,7 +176,7 @@
                                 {{-- @if ($count_send_data >0 ) --}}
                                  <form action="{{ route('customer.decrease_principle.confirm_decrease_principle') }}" method="post" id="pay_outstanding">
                                     @csrf
-                                    <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
+                                    <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
                                     <input type="hidden" name="add_amount" id="add_amount" value="">
                                     <button class="btn btn-red w-100 mx-auto" type="submit" id="submit_btn" onsubmit="return checkValue();">
                                         ยื่นคำขอลดเงินต้น
