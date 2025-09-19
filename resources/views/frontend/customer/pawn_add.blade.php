@@ -189,7 +189,7 @@
                                         </a>
                                         @if ($count_send_data >0)
 
-                                        <form action="{{ route('customer.increase.comfirm_increase_principle')}}" method="post" id="pay_outstanding">
+                                        <form action="{{ route('customer.increase.comfirm_increase_principle')}}" method="post" >
                                             @csrf
                                             <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
                                             <input type="hidden" name="pawn_id" value="{{ $pawn_data->pawn_id }}">
