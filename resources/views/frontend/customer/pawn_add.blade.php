@@ -120,75 +120,72 @@
 
                                     <tr class="total">
                                         <th>วงเงินที่เพิ่มได้สูงสุด :</th>
-                                        @php
-                                            $maximimum_amount =  $pawn_data->total_pawn_amount - $pawn_data->total_pawn_amount_first;
-                                        @endphp
-                                        <td>{{ $maximimum_amount<=0?'คุณไม่สามารถเพิ่มวงเงินได้': number_format($maximimum_amount) .' บาท' }} </td>
+                                        <td>{{ $maximum_amount<=0?'คุณไม่สามารถเพิ่มวงเงินได้': number_format($maximum_amount) .' บาท' }} </td>
                                     </tr>
                                 </table>
                             </div><!--card-->
-
-                            @if ($maximimum_amount >0)
+                            @if ($maximum_amount >0 && $check_last_transaction <=0)
                             <div class="form-group mt-4">
                                 <label class="title">ระบุจำนวนเงินที่ต้องการ (ขั้นต่ำ 100 บาท)</label>
                                 <input type="text" class="form-control style-2" id="amount_request" name="amount_request">
-
                             </div>
                             @endif
-
                         </div>
-                        @if ($maximimum_amount >0)
 
-                        <div class="col-12 pt-2 mb-sm-5">
+                        @if($check_last_transaction <=0)
+                            @if ($maximum_amount >0)
+                                <div class="col-12 pt-2 mb-sm-5">
+                                    <div class="buttons">
+                                        <a href="{{ route('customer.consignment_detail',$pawn_data->pawn_barcode)}}" class="btn btn-gold mx-1 w-135">
+                                        ยกเลิก
+                                        </a>
+                                        @if ($count_send_data >0)
+                                        {{ $pawn_data->pawn_barcode }}
+                                        <form action="{{ route('customer.increase.comfirm_increase_principle')}}" method="post" id="pay_outstanding">
+                                            @csrf
+                                            <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
+                                            <input type="hidden" name="pawn_id" value="{{ $pawn_data->pawn_id }}">
+                                            <input type="hidden" name="customer_id" value="{{ $pawn_add_data->customer_id }}">
+                                            <input type="hidden" name="interest" value="{{ $pawn_send_data->interest }}">
+                                            <input type="hidden" name="add_amount" id="add_amount" value="">
+                                            <button class="btn btn-red mx-1 w-135" type="submit">
+                                            ยื่นคำขอ
+                                            </button>
+                                        </form>
+                                        {{-- <button class="btn mx-1 w-135" type="button" onclick="payOutstanding()">
+                                            ยื่นคำขอ
+                                        </button> --}}
+                                        @else
+
+                                        <form action="{{ route('customer.increase_principle')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
+                                            <input type="hidden" name="pawn_id" value="{{ $pawn_data->pawn_id }}">
+                                            <input type="hidden" name="customer_id" value="{{ $pawn_add_data->customer_id }}">
+                                            <input type="hidden" name="interest" value="{{ $pawn_send_data->interest }}">
+                                            <input type="hidden" name="add_amount" id="add_amount" value="">
+                                            <button class="btn  mx-1 w-135" type="submit">
+                                                ยื่นคำขอ
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            @else
                             <div class="buttons">
-                                <a href="{{ route('customer.consignment_detail',$pawn_data->pawn_barcode)}}" class="btn btn-gold mx-1 w-135">
-                                ยกเลิก
+                                <a href="{{ route('customer.consignment_detail', $pawn_data->pawn_barcode)}}" class="btn btn-gold mx-1 w-135">
+                                    ยกเลิก
                                 </a>
-                                  @if ($count_send_data >0)
-                                 <form action="{{ route('customer.interest.comfirm_increase_principle')}}" method="post" id="pay_outstanding">
-                                    @csrf
-                                    <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
-                                    <input type="hidden" name="customer_id" value="{{ $pawn_add_data->customer_id }}">
-                                    <input type="hidden" name="add_amount" id="add_amount" value="">
-                                    <button class="btn btn-red mx-1 w-135" type="submit">
-                                       ยื่นคำขอ
-                                    </button>
-                                  </form>
-                                  {{-- <button class="btn mx-1 w-135" type="button" onclick="payOutstanding()">
-                                    ยื่นคำขอ
-                                  </button> --}}
-                                  @else
-                                   <form action="{{ route('customer.increase_principle')}}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="barcode" value="{{ $pawn_data->pawn_barcode }}">
-                                    <input type="hidden" name="add_amount" id="add_amount" value="">
-                                    <button class="btn  mx-1 w-135" type="submit">
+                                {{-- <button class="btn mx-1 w-135" type="button" {{ $count_send_data ==0?'onclick=checkAccruedInterest()':'onclick=payOutstanding()' }}>
                                         ยื่นคำขอ
-                                    </button>
-                                  </form>
-
-                                  @endif
-
-
-
-
-
-
-
-
-
+                                    </button> --}}
                             </div>
-                        </div>
-                        @else
-                        <div class="buttons">
-                            <a href="{{ route('customer.consignment_detail', $pawn_data->pawn_barcode)}}" class="btn btn-gold mx-1 w-135">
-                                ยกเลิก
-                            </a>
-                               {{-- <button class="btn mx-1 w-135" type="button" {{ $count_send_data ==0?'onclick=checkAccruedInterest()':'onclick=payOutstanding()' }}>
-                                    ยื่นคำขอ
-                                </button> --}}
-
-                        </div>
+                            @endif
+                         @else
+                            <p></p>
+                            <div class="alert alert-warning" role="alert">
+                                    ไม่สามารถยื่นคำขอเพิ่มเงินต้นในขณะนี้ เนื่องจากมีการทำรายการเข้ามาแล้ว <br/>กรุณาทำรายการใหม่ในวันพรุ่งนี้
+                            </div>
 
                         @endif
 

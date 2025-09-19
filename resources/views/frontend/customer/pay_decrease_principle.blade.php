@@ -105,8 +105,8 @@
                                 <input type="hidden" name="pawn_send_interest_id" value="{{ $pawn_send_data->id }}">
                                 <input type="hidden" name="pawn_barcode" value="{{ $pawn_data->pawn_barcode }}">
                                 <input type="hidden" name="customer_id" value="{{ $customer_id }}">
-                                 <input type="hidden" name="add_amount" value="{{ $add_amount }}">
-                                  <input type="hidden" name="payment_method" value="bank transfer">
+                                <input type="hidden" name="add_amount" value="{{ $add_amount }}">
+                                <input type="hidden" name="payment_method" value="Cash">
                                 <input type="hidden" name="payment_status" value="pending">
                                 <input type="hidden" name="payment_date" value="{{ date('Y-m-d H:i:s') }}">
                                 <input type="hidden" name="customer_name" value="{{ $pawn_data->customer_name }}">

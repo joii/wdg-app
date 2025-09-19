@@ -139,7 +139,7 @@
 
                                     <tr>
                                         <th>จำนวนเงิน :</th>
-                                        <td>{{ number_format($item->payment_amount) }} บาท</td>
+                                        <td>{{ $item->transaction_type =='acc'? number_format($item->interest):number_format($item->amount) }} บาท</td>
                                     </tr>
                                 </table>
                             </div><!--card-->

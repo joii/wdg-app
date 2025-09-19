@@ -177,7 +177,7 @@
                                  <input type="hidden" name="add_amount" value="{{ $add_amount }}">
                                   <input type="hidden" name="branch_id" value="1">
                                 {{-- <input type="hidden" name="transaction_type" value="acc"> --}}
-                                <input type="hidden" name="payment_method" value="bank transfer">
+                                <input type="hidden" name="payment_method" value="Cash">
                                 <input type="hidden" name="payment_status" value="pending">
                                 <input type="hidden" name="payment_date" value="{{ date('Y-m-d H:i:s') }}">
                                 <input type="hidden" name="customer_name" value="{{ $pawn_data->customer_name }}">

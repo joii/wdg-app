@@ -97,7 +97,7 @@ Route::middleware('member')->group(function () {
     Route::post('/customer/interest/pay_outstanding', [PawnOnlineController::class, 'PayOutstandingInterest'])->name('customer.interest.pay_outstanding');
     Route::post('/customer/interest/pay_outstanding/confirm_payment', [PawnOnlineController::class, 'ConfirmPayOutstandingInterest'])->name('customer.outstanding-interest.comfirm_payment');
     Route::post('/customer/interest/pay_outstanding/store_payment', [PawnOnlineController::class, 'StorePayOutstandingInterest'])->name('customer.outstanding-interest.payment.store');
-    Route::post('/customer/interest/confirm_increase_principle', [PawnOnlineController::class, 'ConfirmIncreasePrinciple'])->name('customer.interest.comfirm_increase_principle');
+    Route::post('/customer/interest/confirm_increase_principle', [PawnOnlineController::class, 'ConfirmIncreasePrinciple'])->name('customer.increase.comfirm_increase_principle');
     Route::post('/customer/pawn_add/increase_principle', [PawnOnlineController::class, 'IncreasePrinciple'])->name('customer.increase_principle');
 
 });
@@ -106,7 +106,7 @@ Route::middleware('member')->group(function () {
 Route::middleware('member')->group(function () {
     Route::get('/customer/pawn_decrease/{pawn_barcode}', [PawnOnlineController::class, 'PawnDecrease'])->name('customer.pawn_decrease');
     Route::post('/customer/decrease/pay_outstanding', [PawnOnlineController::class, 'PayOutstandingInterest2'])->name('customer.decrease_principle.pay_outstanding');
-     Route::post('/customer/decrease/confirm_decrease_principle', [PawnOnlineController::class, 'ConfirmDecreasePrinciple'])->name('customer.decrease_principle.confirm_decrease_principle');
+    Route::post('/customer/decrease/confirm_decrease_principle', [PawnOnlineController::class, 'ConfirmDecreasePrinciple'])->name('customer.decrease_principle.confirm_decrease_principle');
     Route::post('/customer/decrease/decrease_principle', [PawnOnlineController::class, 'DecreasePrinciple'])->name('customer.decrease_principle');
     Route::post('/customer/decrease/decrease_principle_payment', [PawnOnlineController::class, 'PayDecreasePrinciple'])->name('customer.pay_decrease_principle');
 });

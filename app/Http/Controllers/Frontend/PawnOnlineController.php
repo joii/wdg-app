@@ -34,7 +34,7 @@ class PawnOnlineController extends Controller
 
     // ต่อดอก
     public function PawnInterest($pawn_barcode){
-       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
        $interest_data =  PawnInterestData::where('pawn_barcode', $pawn_barcode)->take(6)->orderBy('created_at','desc')->get();
        return view('frontend.customer.pawn_interest', compact('pawn_data','interest_data'));
 
@@ -47,7 +47,7 @@ class PawnOnlineController extends Controller
         $interest_amount = $interest_amount_data[0];
         $number_of_month = $interest_amount_data[1];
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
 
           return view('frontend.customer.pay_interest', compact('pawn_data','interest_amount','number_of_month'));
     }
@@ -129,12 +129,15 @@ class PawnOnlineController extends Controller
         $sms_phone = $branch_arr->sms_phone;
         $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_barcode.' มีการชำระรายการต่อดอกกรุณาตรวจสอบ');
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        //$pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
 
-        $member_id = Auth::guard('member')->id();
+       // $member_id = Auth::guard('member')->id();
+        // $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
+        // return view('frontend.customer.transaction_history', compact('transactions'));
 
-        $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
-        return view('frontend.customer.transaction_history', compact('transactions'));
+         return redirect()->route('customer.transaction_history')->with('success', 'Payment successful');
+
+
     }
 
      /**
@@ -145,9 +148,21 @@ class PawnOnlineController extends Controller
 
     // เพิ่มเงินต้น
     public function PawnAdd($pawn_barcode){
-       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-       $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-       $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+
+       // Check last transaction : once per day
+       $date = Carbon::now();
+       $check_last_transaction = PawnOnlineTransaction::where('pawn_barcode', $pawn_barcode)->where('transaction_type', 'inc')->where('created_at','>=',$date->startOfDay())->count();
+
+    //    if($check_last_transaction>0){
+    //     return redirect()->back()->with('error','คุณได้ทำการเพิ่มเงินต้นในวันนี้แล้ว');
+    //    }
+
+       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
        $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
        $pawn_send_id = $pawn_send_data->id;
        $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -155,7 +170,13 @@ class PawnOnlineController extends Controller
         $count_send_data =0;
        }
 
-       return view('frontend.customer.pawn_add', compact('pawn_data','pawn_add_data','pawn_send_data','count_send_data'));
+       $maximum_amount = $pawn_add_data->pawn_add;
+       if($pawn_add_data->pawn_add==0){
+        $maximum_amount = $pawn_data->total_pawn_amount - $pawn_data->total_pawn_amount_first;
+       }
+
+
+       return view('frontend.customer.pawn_add', compact('pawn_data','pawn_add_data','pawn_send_data','count_send_data','maximum_amount','check_last_transaction'));
 
     }
 
@@ -163,9 +184,9 @@ class PawnOnlineController extends Controller
     public function PawnAddCheckOutstandingInterest(Request $request){
          $pawn_barcode = $request->barcode;
 
-         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+         $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
          $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
          $pawn_send_id = $pawn_send_data->id;
          $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -183,8 +204,8 @@ class PawnOnlineController extends Controller
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
         $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
         $pawn_send_id = $pawn_send_data->id;
         $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -202,8 +223,8 @@ class PawnOnlineController extends Controller
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
         $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
         $pawn_send_id = $pawn_send_data->id;
        $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -214,7 +235,7 @@ class PawnOnlineController extends Controller
           return view('frontend.customer.confirm_payment', compact('pawn_data','pawn_send_data','count_send_data','customer_id','add_amount'));
     }
 
-     // บันทึกการชำระดอกก่อนทำการเพิ่มต้น
+     // บันทึกการชำระดอกก่อนทำการเพิ่มต้น กรณีแยกเป็น 2 ขั้นตอน
      public function StorePayOutstandingInterest(Request $request){
 
          $pawn_id = $request->pawn_id;
@@ -275,7 +296,6 @@ class PawnOnlineController extends Controller
         }
 
 
-
          // Update Pawn Transaction
             PawnTransaction::create([
                 'pawn_id' => $pawn_id,
@@ -292,8 +312,8 @@ class PawnOnlineController extends Controller
 
         //  Decrease Pawn Amount Transaction
          $transaction_type = 'dec';
-         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
          $pawn_add_id = $pawn_add_data->id;
          $pawn_id = $pawn_add_data->pawn_id;
 
@@ -347,7 +367,9 @@ class PawnOnlineController extends Controller
         $transaction_type ='';
 
         $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
-        return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+       // return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+
+        return redirect()->route('customer.transaction.history')->with('success', 'Payment successful');
 
 
     }
@@ -374,8 +396,8 @@ class PawnOnlineController extends Controller
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
         $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
         $pawn_send_id = $pawn_send_data->id;
         $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -383,7 +405,7 @@ class PawnOnlineController extends Controller
          $count_send_data =0;
         }
 
-          return view('frontend.customer.confirm_increase_principle', compact('pawn_data','pawn_send_data','count_send_data','customer_id','add_amount'));
+        return view('frontend.customer.confirm_increase_principle', compact('pawn_data','pawn_send_data','count_send_data','customer_id','add_amount'));
 
     }
 
@@ -392,10 +414,12 @@ class PawnOnlineController extends Controller
     public function IncreasePrinciple(Request $request){
          $pawn_id = $request->pawn_id;
          $pawn_barcode = $request->pawn_barcode;
-         $pawn_send_interest_id = $request->pawn_send_interest_id;
+         //$pawn_send_interest_id = $request->pawn_send_interest_id;
          $add_amount = $request->add_amount;
 
-         $branch_code = substr($pawn_barcode,0,2);
+
+        // Find Branch Code for pawn
+        $branch_code = substr($pawn_barcode,0,2);
          switch ($branch_code) {
             case 'AC': $branch_id = 1; break;
             case 'BH': $branch_id = 1; break;
@@ -408,9 +432,14 @@ class PawnOnlineController extends Controller
          }
 
 
+        $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+
+        $pawn_add_id = $pawn_add_data->id;
+        $pawn_id = $pawn_add_data->pawn_id;
+
 
          // Accrued Interest Transaction
-         $transaction_type = 'acc';
          $transaction = PawnOnlineTransaction::create([
                 'token_id' => Str::random(60),
                 'transaction_date' => Carbon::now(),
@@ -425,19 +454,20 @@ class PawnOnlineController extends Controller
                 'interest' => $request->interest,
                 'amount' => 0,//$request->total_pawn_amount,
                 'payment_amount' => $request->interest,
-                'payment_method' => $request->payment_method,
-                'payment_date' => $request->payment_date,
+                'payment_method' => NULL, // ไม่ได้รับโอนจากลูกค้า
+                'payment_date' => Carbon::now(),
                 'payment_slip' => NULL,
                 'payment_status' => 'paid',
-                'customer_name' => $request->customer_name,
-                'customer_address' => $request->customer_address,
-                'customer_phone' => $request->customer_phone,
-                'id_card' => $request->id_card,
+                'customer_name' => $pawn_data->customer_name,
+                'customer_address' => $pawn_data->customer_address,
+                'customer_phone' => $pawn_data->customer_phone,
+                'id_card' => $pawn_data->id_card,
                 'status' => 'paid',
                 'created_at' => Carbon::now(),
             ]);
 
             $transaction_id = $transaction->id;
+            $pawn_outstanding_interest_id = $transaction->id;
 
             // Update Pawn Transaction
             PawnTransaction::create([
@@ -446,7 +476,7 @@ class PawnOnlineController extends Controller
                 'transaction_type' => 'acc',//$transaction_type,
                 'pawn_add_id' => NULL,
                 'pawn_interest_id' =>  NULL,
-                'pawn_outstanding_interest_id' => $pawn_send_interest_id,
+                'pawn_outstanding_interest_id' => $pawn_outstanding_interest_id,
                 'yup_id' =>  NULL,
                 'withdrawn_id' =>  NULL,
                 'payment_status' =>'paid',
@@ -455,45 +485,40 @@ class PawnOnlineController extends Controller
 
 
          // Increase Pawn Amount Transaction
-         $transaction_type = 'inc';
-         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_add_id = $pawn_add_data->id;
-         $pawn_id = $pawn_add_data->pawn_id;
 
 
-       $transaction = PawnOnlineTransaction::create([
-        'token_id' => Str::random(60),
-        'transaction_date' => Carbon::now(),
-        'transaction_time' => Carbon::now()->toTimeString(),
-        'transaction_code' => Str::random(10),
-        'transaction_parties' => $transaction_id,
-        'transaction_type' => 'inc',
-        'pawn_id' => $pawn_add_data->pawn_id,
-        'pawn_barcode' => $pawn_add_data->pawn_barcode,
-        'branch_id' => $branch_id,
-        'member_id' => Auth::guard('member')->id(),
-        'customer_id' => $pawn_add_data->customer_id,
-        'interest' => $request->interest,
-        'amount' => $request->add_amount-$request->interest,//$pawn_data->total_pawn_amount,
-        'payment_amount' => $request->add_amount,
-        'payment_status' => 'pending',
-        'customer_name' => $pawn_data->customer_name,
-        'customer_address' => $pawn_data->customer_address,
-        'customer_phone' => $pawn_data->customer_phone,
-        'id_card' => $request->id_card,
-        'status' => 'pending',
-        'created_at' => Carbon::now(),
-         ]);
+            $transaction = PawnOnlineTransaction::create([
+            'token_id' => Str::random(60),
+            'transaction_date' => Carbon::now(),
+            'transaction_time' => Carbon::now()->toTimeString(),
+            'transaction_code' => Str::random(10),
+            'transaction_parties' => $transaction_id,
+            'transaction_type' => 'inc',
+            'pawn_id' => $pawn_add_data->pawn_id,
+            'pawn_barcode' => $pawn_add_data->pawn_barcode,
+            'branch_id' => $branch_id,
+            'member_id' => Auth::guard('member')->id(),
+            'customer_id' => $pawn_add_data->customer_id,
+            'interest' => $request->interest,
+            'amount' => $request->add_amoun,
+            'payment_amount' => $request->add_amount-$request->interest,
+            'payment_status' => 'pending',
+            'customer_name' => $pawn_data->customer_name,
+            'customer_address' => $pawn_data->customer_address,
+            'customer_phone' => $pawn_data->customer_phone,
+            'id_card' => $pawn_data->id_card,
+            'status' => 'pending',
+            'created_at' => Carbon::now(),
+            ]);
 
-         $transaction_id = $transaction->id;
+          $transaction_id = $transaction->id;
 
 
           // Update Pawn Transaction
             PawnTransaction::create([
                 'pawn_id' => $pawn_id,
                 'transaction_id' => $transaction_id,
-                'transaction_type' => $transaction_type,
+                'transaction_type' => 'inc',
                 'pawn_add_id' => $pawn_add_id,
                 'pawn_interest_id' =>  NULL,
                 'pawn_outstanding_interest_id' => NULL,
@@ -506,13 +531,15 @@ class PawnOnlineController extends Controller
             // Send SMS to customer/Admin
              $branch_arr = Branch::where('id',$branch_id)->first();
              $sms_phone = $branch_arr->sms_phone;
-            $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_add_data->pawn_barcode.' มีการทำรายการเพิ่มเงินต้นกรุณาตรวจสอบ');
+             $this->ThaiBulkSmsService->sendSMS($sms_phone,$pawn_add_data->pawn_barcode.' มีการทำรายการเพิ่มเงินต้นกรุณาตรวจสอบ');
 
 
-            $member_id = Auth::guard('member')->id();
-            $transaction_type ='';
-            $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
-            return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+            // $member_id = Auth::guard('member')->id();
+            // $transaction_type ='';
+            // $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
+            //return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+
+             return redirect()->route('customer.transaction_history')->with('success', 'Payment successful');
 
     }
 
@@ -520,9 +547,9 @@ class PawnOnlineController extends Controller
     // Decrease Principle Process
 
     public function PawnDecrease($pawn_barcode){
-       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-       $pawn_interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-       $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+       $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_interest_data = PawnInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+       $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
        $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
        $pawn_send_id = $pawn_send_data->id;
        $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -538,8 +565,8 @@ class PawnOnlineController extends Controller
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
         $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
         $pawn_send_id = $pawn_send_data->id;
         $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -556,8 +583,8 @@ class PawnOnlineController extends Controller
         $customer_id = $request->customer_id;
         $add_amount = $request->add_amount;
 
-        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+        $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+        $pawn_send_data = PawnSendInterestData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
         $count_send_data = PawnsendInterestData::where('pawn_barcode', $pawn_barcode)->count();
         $pawn_send_id = $pawn_send_data->id;
        $count_paid_interest = PawnTransaction::where('pawn_outstanding_interest_id', $pawn_send_id)->where('payment_status', 'paid')->count();
@@ -648,8 +675,8 @@ class PawnOnlineController extends Controller
 
         //  Decrease Pawn Amount Transaction
          $transaction_type = 'dec';
-         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->latest()->first();
-         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->latest()->first();
+         $pawn_add_data = PawnAddData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
+         $pawn_data = PawnData::where('pawn_barcode', $pawn_barcode)->orderBy('created_at', 'desc')->first();
          $pawn_add_id = $pawn_add_data->id;
          $pawn_id = $pawn_add_data->pawn_id;
 
@@ -667,8 +694,8 @@ class PawnOnlineController extends Controller
         'member_id' => Auth::guard('member')->id(),
         'customer_id' => $pawn_add_data->customer_id,
         'interest' => $request->interest,
-        'amount' => $request->add_amount-$request->interest,//$pawn_data->total_pawn_amount,
-        'payment_amount' => $request->add_amount,
+        'amount' => $request->add_amount,
+        'payment_amount' => $request->add_amount+$request->interest,
         'payment_method' => $request->payment_method,
         'payment_date' => $request->payment_date,
         'payment_slip' => $save_url,
@@ -706,11 +733,13 @@ class PawnOnlineController extends Controller
 
 
 
-        $member_id = Auth::guard('member')->id();
-        $transaction_type ='';
+        // $member_id = Auth::guard('member')->id();
+        // $transaction_type ='';
 
-        $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
-        return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+        // $transactions = PawnOnlineTransaction::where('member_id',$member_id)->latest()->paginate(10);
+        // return view('frontend.customer.transaction_history', compact('transactions','transaction_type'));
+
+         return redirect()->route('customer.transaction_history')->with('success', 'Payment successful');
 
 
     }
